@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Post from "./Post/Post";
 import Header from "./Header/Header";
+import Footer from "./Footer/Footer";
 
 function App() {
   return (
