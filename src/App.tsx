@@ -1,14 +1,13 @@
 import React from 'react';
 import './App.css';
-import Post from "./Post/Post";
 import Header from "./Header/Header";
-import Footer from "./Footer/Footer";
+import Feed from "./Feed/Feed";
 
 function App() {
   return (
     <div className="App">
       <Header/>
-      <Post/>
+      <Feed/>
     </div>
   );
 }
