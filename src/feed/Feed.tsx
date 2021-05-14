@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Post from "../Post/Post";
+import Post from "../post/Post";
 
 const useStyles = makeStyles((theme) => ({
   icon: {

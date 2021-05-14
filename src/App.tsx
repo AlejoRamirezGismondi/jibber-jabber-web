@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import Header from "./Header/Header";
-import Feed from "./Feed/Feed";
+import Header from "./header/Header";
+import Feed from "./feed/Feed";
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
-import NewPost from "./Post/NewPost";
+import NewPost from "./post/NewPost";
 
 const theme = createMuiTheme({
   palette: {
