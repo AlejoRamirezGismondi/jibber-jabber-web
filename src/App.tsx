@@ -3,6 +3,7 @@ import './App.css';
 import Header from "./Header/Header";
 import Feed from "./Feed/Feed";
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import NewPost from "./Post/NewPost";
 
 const theme = createMuiTheme({
   palette: {
@@ -37,6 +38,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <div className="App">
         <Header/>
+        <NewPost/>
         <Feed/>
       </div>
     </MuiThemeProvider>
