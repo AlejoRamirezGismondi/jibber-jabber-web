@@ -14,6 +14,7 @@ import {red} from "@material-ui/core/colors";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,6 +62,9 @@ const Post = () => {
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon/>
+        </IconButton>
+        <IconButton aria-label="comment">
+          <ChatBubbleIcon/>
         </IconButton>
       </CardActions>
     </Card>
