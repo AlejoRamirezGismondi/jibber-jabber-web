@@ -23,18 +23,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Post = () => {
+const Post = (props) => {
   const classes = useStyles();
-  const date: string = '5/15/2021, 12:23:43 AM';
-  const userName: string = 'User Name';
 
   return (
-    <PostCard date={date} userName={userName}>
+    <PostCard date={props.date} userName={props.userName}>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p" className={classes.postText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat.
+          {props.text}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
