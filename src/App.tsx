@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
-import Header from "./header/Header";
-import Feed from "./feed/Feed";
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
-import NewPost from "./post/NewPost";
+import Router from "./router/Router";
 
 const theme = createMuiTheme({
   palette: {
@@ -37,9 +35,7 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <div className="App">
-        <Header/>
-        <NewPost/>
-        <Feed/>
+        <Router/>
       </div>
     </MuiThemeProvider>
   );
