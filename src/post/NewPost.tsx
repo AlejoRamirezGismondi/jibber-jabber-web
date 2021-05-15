@@ -1,15 +1,14 @@
 import React from 'react';
 import {
-  Avatar, Card, CardActions,
+  CardActions,
   CardContent,
-  CardHeader,
   createStyles, IconButton,
   makeStyles, TextField,
   Theme
 } from "@material-ui/core";
 import {red} from "@material-ui/core/colors";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SendIcon from '@material-ui/icons/Send';
+import PostCard from "./PostCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,10 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'justify',
     },
     sendButton: {
-      marginLeft: "auto"
+      marginLeft: "auto",
     },
     textField: {
-      minWidth: "300px"// TODO ahora esto mismo pero no con px
+      minWidth: "100%",
     }
   }),
 );
@@ -36,21 +35,7 @@ const NewPost = () => {
 
   return (
     <form>
-      <Card className={classes.root}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="post" className={classes.avatar}>
-              U
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon/>
-            </IconButton>
-          }
-          title="User Name"
-          subheader="September 14, 2021"
-        />
+      <PostCard>
         <CardContent>
           <TextField
             multiline
@@ -64,7 +49,7 @@ const NewPost = () => {
             <SendIcon/>
           </IconButton>
         </CardActions>
-      </Card>
+      </PostCard>
     </form>
   );
 }
