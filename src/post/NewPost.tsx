@@ -10,6 +10,9 @@ import {red} from "@material-ui/core/colors";
 import SendIcon from '@material-ui/icons/Send';
 import PostCard from "./PostCard";
 
+const maxRows: number = 4;
+const maxLength: number = 180;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -26,22 +29,28 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textField: {
       minWidth: "100%",
+    },
+    postCard: {
+      width: '100%',
     }
   }),
 );
 
-const NewPost = () => {
+const NewPost = (props) => {
   const classes = useStyles();
+  const date: Date = new Date();
+  const userName: string = 'User Name';
 
   return (
-    <form>
-      <PostCard>
+    <form className={props.className}>
+      <PostCard className={classes.postCard} date={date.toLocaleString()} userName={userName}>
         <CardContent>
           <TextField
             multiline
-            rows={4}
+            rows={maxRows}
             variant="outlined"
             className={classes.textField}
+            inputProps={{ maxLength: maxLength }}
           />
         </CardContent>
         <CardActions disableSpacing>

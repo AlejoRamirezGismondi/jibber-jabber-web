@@ -25,9 +25,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Post = () => {
   const classes = useStyles();
+  const date: string = '5/15/2021, 12:23:43 AM';
+  const userName: string = 'User Name';
 
   return (
-    <PostCard>
+    <PostCard date={date} userName={userName}>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p" className={classes.postText}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore

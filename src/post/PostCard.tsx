@@ -28,7 +28,7 @@ const PostCard = (props) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={[classes.root, props.className].join(' ')}>
       <CardHeader
         avatar={
           <Avatar aria-label="post" className={classes.avatar}>
@@ -40,8 +40,8 @@ const PostCard = (props) => {
             <MoreVertIcon/>
           </IconButton>
         }
-        title="User Name"
-        subheader="September 14, 2021"
+        title={props.userName}
+        subheader={props.date}
       />
       {props.children}
     </Card>
