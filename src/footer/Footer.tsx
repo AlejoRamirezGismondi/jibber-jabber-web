@@ -3,20 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary">
-      {'Copyright © '}
-      <Link color="inherit">
-        jibberjabber.com
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Copyright from "../copyright/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   root: {
