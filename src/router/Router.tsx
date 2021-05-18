@@ -5,6 +5,7 @@ import AuthRoute from "./AuthRoute";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import Register from "../pages/Register";
 
 const Router = () => {
 
@@ -12,6 +13,7 @@ const Router = () => {
     <BrowserRouter>
       <Switch>
         <ReverseAuthRoute path={"/login"} component={Login}/>
+        <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
         <Route path={"/"} component={Home}/>
       </Switch>
