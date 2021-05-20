@@ -1,3 +1,17 @@
+# Docker
+
+This project uses Docker to serve the static html files in an nginx server.
+
+You can build the image with:
+
+### `docker build -t jibber-jabber-web .`
+
+You can run the image with:
+
+### `docker run -d --name jibber-jabber-web -p 80:80 jibber-jabber-web`
+
+The application will be started on port 80
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -44,3 +58,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+[Docker and Nginx](https://medium.com/bb-tutorials-and-thoughts/how-to-serve-react-application-with-nginx-and-docker-9c51ac2c50ba).
+
+[Class Material](https://github.com/austral-ingsis/spring-docker-compose-example).
