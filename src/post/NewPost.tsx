@@ -46,7 +46,7 @@ const NewPost = (props) => {
   const [text, setText] = useState("");
 
   function createNewPost() {
-    axios.post(postUrl+`post`, { text })
+    axios.post(postUrl+`post`, { text:text })
       .then(res => {
         console.log(res);
         console.log(res.data);
