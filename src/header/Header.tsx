@@ -39,11 +39,8 @@ const Header = () => {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small" className={classes.button}>
+        <Button variant="outlined" size="small" className={classes.button} href={"/register"}>
           Sign up
-        </Button>
-        <Button variant="outlined" size="small" className={classes.button} color={"primary"}>
-          New
         </Button>
       </div>
     </Toolbar>
