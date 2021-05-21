@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -41,10 +41,12 @@ interface Props {
 const ProfileInfo = (props: Props) => {
   const classes = useStyles();
 
+  const [editEnabled, setEditEnabled] = useState<boolean>();
+
   return (
     <Card className={classes.root}>
       <div className={classes.editIcon}>
-        <IconButton aria-label="settings">
+        <IconButton aria-label="settings" onClick={() => {setEditEnabled(!editEnabled)}}>
           <EditIcon/>
         </IconButton>
       </div>
