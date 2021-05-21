@@ -32,7 +32,7 @@ const Home = () => {
   const [cards, setCards] = useState<[GettedPost]>();
 
   useEffect(() => {
-    axios.get(postUrl+`posts`)
+    axios.get(postUrl+`post`)
       .then(res => {
         setCards(res.data)
       })
