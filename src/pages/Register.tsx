@@ -35,20 +35,24 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
   const classes = useStyles();
 
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const newUser = {
-      username: username,
+    const user = {
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
       email: email,
       password: password
     };
 
-    axios.post(userUrl+`user`, { newUser })
+    axios.post(userUrl+`user`, user)
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -77,7 +81,33 @@ const Register = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
-                onChange={(e) => {setUsername(e.target.value)}}
+                onChange={(e) => {setFirstName(e.target.value)}}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="lname"
+                name="lastname"
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                autoFocus
+                onChange={(e) => {setLastName(e.target.value)}}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="age"
+                name="age"
+                variant="outlined"
+                required
+                fullWidth
+                id="age"
+                label="Age"
+                autoFocus
+                onChange={(e) => {setAge(e.target.value)}}
               />
             </Grid>
             <Grid item xs={12}>
