@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from "axios";
+import {userUrl} from "../utils/http";
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +36,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  let history = useHistory();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const user = {
+      email: email,
+      password: password
+    };
+
+    axios.post(userUrl+`user/login`, user)
+      .then(response => {
+        document.cookie=`token=${response.data};`
+        history.push('/');
+      });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -44,7 +66,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -55,6 +77,7 @@ const Login = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => {setEmail(e.target.value)}}
           />
           <TextField
             variant="outlined"
@@ -66,6 +89,7 @@ const Login = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => {setPassword(e.target.value)}}
           />
           <Button
             type="submit"
