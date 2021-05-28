@@ -10,7 +10,7 @@ import {red} from "@material-ui/core/colors";
 import SendIcon from '@material-ui/icons/Send';
 import PostCard from "./PostCard";
 import axios from "axios";
-import {postUrl} from "../utils/http";
+import {postUrl, userUrl} from "../utils/http";
 
 const maxRows: number = 4;
 const maxLength: number = 180;
@@ -45,6 +45,12 @@ const NewPost = (props) => {
 
   const [text, setText] = useState("");
 
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    createNewPost();
+  }
+
   function createNewPost() {
     axios.post(postUrl+`post`, { text:text })
       .then(res => {
@@ -54,7 +60,7 @@ const NewPost = (props) => {
   }
 
   return (
-    <form className={props.className}>
+    <form className={props.className} onSubmit={handleSubmit}>
       <PostCard className={classes.postCard} date={date.toLocaleString()} userName={userName}>
         <CardContent>
           <TextField
@@ -67,7 +73,7 @@ const NewPost = (props) => {
           />
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="post" className={classes.sendButton} onClick={() => {createNewPost()}}>
+          <IconButton aria-label="post" className={classes.sendButton}>
             <SendIcon/>
           </IconButton>
         </CardActions>
