@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from "axios";
 import {userUrl} from "../utils/http";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,6 +41,7 @@ const Register = () => {
   const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -56,7 +58,8 @@ const Register = () => {
       .then(res => {
         console.log(res);
         console.log(res.data);
-      })
+        history.push("/login");
+      });
   }
 
   return (
