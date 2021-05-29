@@ -3,11 +3,11 @@ import Header from "../header/Header";
 import ProfileInfo from "./ProfileInfo";
 import axios from "axios";
 import {userUrl} from "../utils/http";
+import {User} from "../models/User";
 
 const Profile = () => {
 
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     let token = '';
@@ -17,24 +17,21 @@ const Profile = () => {
       }
     );
 
-    console.log(token);
-
     axios.get(userUrl + 'user', {
       headers: {
-        authorization: `bearer ${token}`
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(response => {
-        setUsername(response.data.firstName);
-        setEmail(response.data.email);
+        setUser(response.data);
       })
-  }, [username, email]);
+  }, []);
 
-  if (username && email) {
+  if (user) {
     return (
       <div>
         <Header/>
-        <ProfileInfo username={username} email={email}/>
+        <ProfileInfo firstName={user.firstName} lastName={user.lastName} age={user.age} email={user.email}/>
       </div>
     )
   } else {

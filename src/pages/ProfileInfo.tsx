@@ -12,6 +12,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import {userUrl} from "../utils/http";
+import {User} from "../models/User";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,17 +38,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-interface Props {
-  username: string,
-  email: string
-}
-
-const ProfileInfo = (props: Props) => {
+const ProfileInfo = (props: User) => {
   const classes = useStyles();
 
   const [editEnabled, setEditEnabled] = useState<boolean>();
-  const [username, setUsername] = useState<string>();
-  const [email, setEmail] = useState<string>();
+  const [firstName, setFirstName] = useState<string>(props.firstName);
+  const [lastName, setLastName] = useState<string>(props.lastName);
+  const [age, setAge] = useState<string>(props.age);
+  const [email, setEmail] = useState<string>(props.email);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -59,17 +57,20 @@ const ProfileInfo = (props: Props) => {
       }
     );
 
-    axios.post(userUrl+`user/edit`, {
-      headers: {
-        authorization: `bearer ${token}`
-      },
+    axios.post(userUrl + `user/edit`, {
       data: {
-        firstName: username,
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
         email: email
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(response => {
-        document.cookie=`token=${response.data};`
+        document.cookie = `token=${response.data};`
       });
   }
 
@@ -77,31 +78,66 @@ const ProfileInfo = (props: Props) => {
     return (
       <Card className={classes.root}>
         <div className={classes.editIcon}>
-          <IconButton aria-label="settings" onClick={() => {setEditEnabled(!editEnabled)}}>
+          <IconButton aria-label="settings" onClick={() => {
+            setEditEnabled(!editEnabled)
+          }}>
             <EditIcon/>
           </IconButton>
         </div>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar}>
-              {props.username.charAt(0)}
+              {firstName.charAt(0)}
             </Avatar>
           }
           className={classes.header}
         />
         <CardContent className={classes.content}>
           <form onSubmit={handleSubmit}>
-            <h2>Username</h2>
+            <h2>First Name</h2>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="username"
-              label="username"
-              id="username"
-              placeholder={props.username}
-              onChange={(e) => {setUsername(e.target.value)}}
+              name="firstName"
+              label="firstName"
+              id="firstName"
+              placeholder={firstName}
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value)
+              }}
+            />
+            <h2>Last Name</h2>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="lastName"
+              label="LastName"
+              id="lastName"
+              placeholder={lastName}
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value)
+              }}
+            />
+            <h2>Age</h2>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="age"
+              label="age"
+              id="age"
+              placeholder={age}
+              value={age}
+              onChange={(e) => {
+                setAge(e.target.value)
+              }}
             />
             <h2>Email</h2>
             <TextField
@@ -112,8 +148,11 @@ const ProfileInfo = (props: Props) => {
               name="email"
               label="email"
               id="email"
-              placeholder={props.email}
-              onChange={(e) => {setEmail(e.target.value)}}
+              placeholder={email}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
             />
             <Button
               type="submit"
@@ -132,26 +171,36 @@ const ProfileInfo = (props: Props) => {
   return (
     <Card className={classes.root}>
       <div className={classes.editIcon}>
-        <IconButton aria-label="settings" onClick={() => {setEditEnabled(!editEnabled)}}>
+        <IconButton aria-label="settings" onClick={() => {
+          setEditEnabled(!editEnabled)
+        }}>
           <EditIcon/>
         </IconButton>
       </div>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {props.username.charAt(0)}
+            {firstName.charAt(0)}
           </Avatar>
         }
         className={classes.header}
       />
       <CardContent className={classes.content}>
-        <h2>Username</h2>
+        <h2>First Name</h2>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.username}
+          {firstName}
+        </Typography>
+        <h2>Last Name</h2>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {lastName}
+        </Typography>
+        <h2>Age</h2>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {age}
         </Typography>
         <h2>Email</h2>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.email}
+          {email}
         </Typography>
       </CardContent>
     </Card>
