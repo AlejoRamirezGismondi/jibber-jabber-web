@@ -24,7 +24,7 @@ const Header = () => {
 
   return(
     <Toolbar className={classes.toolbar}>
-      <Button size="small" className={classes.homeButton}>Home</Button>
+      <Button href={"/"} size="small" className={classes.homeButton}>Home</Button>
       <Typography
         component="h2"
         variant="h5"
