@@ -4,8 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Post from "../post/Post";
-import {postUrl} from "../utils/http";
-import axios from "axios";
 import {GettedPost} from "../pages/Home";
 
 const useStyles = makeStyles((theme) => ({

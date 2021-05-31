@@ -37,7 +37,7 @@ const Header = () => {
       </Typography>
       <div className={classes.rightButtons}>
         <IconButton>
-          <SearchIcon />
+          <SearchIcon href={'/search'} />
         </IconButton>
         <Button variant="outlined" size="small" className={classes.button} href={"/profile"}>
           My Profile

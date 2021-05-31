@@ -1,11 +1,12 @@
 import {Route, Switch, BrowserRouter} from 'react-router-dom';
 import React from 'react';
 import ReverseAuthRoute from "./ReverseAuthRoute";
-import AuthRoute from "./AuthRoute";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
+import AuthRoute from "./AuthRoute";
+import Search from "../pages/Search";
 
 const Router = () => {
 
@@ -14,9 +15,8 @@ const Router = () => {
       <Switch>
         <ReverseAuthRoute path={"/login"} component={Login}/>
         <ReverseAuthRoute path={"/register"} component={Register}/>
-        <Route path={'/profile'} component={Profile}/>
-        {/*Change to AuthRoute later*/}
-        <Route path={"/"} component={Home}/>
+        <AuthRoute path={'/profile'} component={Profile}/>
+        <Route path={"/"} component={Search}/>
       </Switch>
     </BrowserRouter>
   )
