@@ -5,6 +5,7 @@ import axios from "axios";
 import {userUrl} from "../utils/http";
 import Grid from "@material-ui/core/Grid";
 import {Avatar, Button, Card, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,17 +61,19 @@ const Search = () => {
         <Grid container spacing={1}>
           <Grid container item xs={12} spacing={3}>
             {users.map(user => (
-              <Grid item key={user.firstName} xs={12} sm={6} md={4}>
+              <Grid item key={user.id} xs={12} sm={6} md={4}>
                 <Card className={classes.root}>
-                  <CardHeader
-                    avatar={
-                      <Avatar aria-label="recipe" className={classes.avatar}>
-                        {user.firstName.charAt(0)}
-                      </Avatar>
-                    }
-                    title={user.firstName}
-                    subheader={user.email}
-                  />
+                  <Link to={'/user/'+user.id}>
+                    <CardHeader
+                      avatar={
+                        <Avatar aria-label="recipe" className={classes.avatar}>
+                          {user.firstName.charAt(0)}
+                        </Avatar>
+                      }
+                      title={user.firstName}
+                      subheader={user.email}
+                    />
+                  </Link>
                 </Card>
               </Grid>
             ))}

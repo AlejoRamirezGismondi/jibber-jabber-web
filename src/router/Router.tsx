@@ -1,7 +1,6 @@
 import {Route, Switch, BrowserRouter} from 'react-router-dom';
 import React from 'react';
 import ReverseAuthRoute from "./ReverseAuthRoute";
-import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
