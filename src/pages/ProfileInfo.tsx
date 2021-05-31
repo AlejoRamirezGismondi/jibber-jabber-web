@@ -198,6 +198,9 @@ const ProfileInfo = (props: User) => {
         <Typography variant="body2" color="textSecondary" component="p">
           {email}
         </Typography>
+        <Button href={'/change-password'}>
+          Change password
+        </Button>
       </CardContent>
     </Card>
   );
