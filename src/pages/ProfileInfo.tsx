@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import {userUrl} from "../utils/http";
 import {User} from "../models/User";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,12 +51,7 @@ const ProfileInfo = (props: User) => {
   function handleSubmit(event) {
     event.preventDefault();
 
-    let token = '';
-    document.cookie.split(";").map(
-      c => {
-        if (c.startsWith("token=")) token = c.split("=")[1]
-      }
-    );
+    let token = getToken();
 
     axios.post(userUrl + `user/edit`, {
       data: {

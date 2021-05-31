@@ -4,18 +4,14 @@ import ProfileInfo from "./ProfileInfo";
 import axios from "axios";
 import {userUrl} from "../utils/http";
 import {User} from "../models/User";
+import {getToken} from "../utils/token";
 
 const Profile = () => {
 
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    let token = '';
-    document.cookie.split(";").map(
-      c => {
-        if (c.startsWith("token=")) token = c.split("=")[1]
-      }
-    );
+    let token = getToken();
 
     axios.get(userUrl + 'user', {
       headers: {

@@ -6,6 +6,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core";
 import axios from "axios";
 import {postUrl, userUrl} from "../utils/http";
 import {User} from "../models/User";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,12 +40,7 @@ const Home = () => {
         setCards(res.data)
       });
 
-    let token = '';
-    document.cookie.split(";").map(
-      c => {
-        if (c.startsWith("token=")) token = c.split("=")[1]
-      }
-    );
+    let token = getToken();
 
     axios.get(userUrl + 'user', {
       headers: {

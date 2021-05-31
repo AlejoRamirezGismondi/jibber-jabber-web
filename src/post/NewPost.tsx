@@ -10,7 +10,7 @@ import {red} from "@material-ui/core/colors";
 import SendIcon from '@material-ui/icons/Send';
 import PostCard from "./PostCard";
 import axios from "axios";
-import {postUrl, userUrl} from "../utils/http";
+import {postUrl} from "../utils/http";
 
 const maxRows: number = 4;
 const maxLength: number = 180;
@@ -52,7 +52,7 @@ const NewPost = (props) => {
   }
 
   function createNewPost() {
-    axios.post(postUrl+`post`, { text:text })
+    axios.post(postUrl+`post`, { title:'', author:props.username, body:text })
       .then(res => {
         console.log(res);
         console.log(res.data);
