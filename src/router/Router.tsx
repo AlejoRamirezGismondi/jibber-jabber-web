@@ -16,8 +16,8 @@ const Router = () => {
         <ReverseAuthRoute path={"/login"} component={Login}/>
         <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
-        <Route path={"/"} component={Search}/>
         <Route path={"/change-password"} component={DangerZone}/>
+        <Route path={"/"} component={Search}/>
       </Switch>
     </BrowserRouter>
   )
