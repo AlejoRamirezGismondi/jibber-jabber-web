@@ -7,6 +7,7 @@ import Profile from "../pages/Profile";
 import AuthRoute from "./AuthRoute";
 import Search from "../pages/Search";
 import DangerZone from "../pages/DangerZone";
+import UserProfile from "../pages/UserProfile";
 
 const Router = () => {
 
@@ -17,6 +18,7 @@ const Router = () => {
         <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
         <Route path={"/change-password"} component={DangerZone}/>
+        <Route path={'/user/:id'} component={UserProfile}/>
         <Route path={"/"} component={Search}/>
       </Switch>
     </BrowserRouter>
