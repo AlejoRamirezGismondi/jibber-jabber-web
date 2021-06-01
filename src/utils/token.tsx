@@ -7,3 +7,9 @@ export const getToken = () => {
   );
   return token;
 }
+
+export const expireToken = () => {
+  document.cookie.split(";").forEach(function (c) {
+    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+  });
+}
