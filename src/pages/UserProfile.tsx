@@ -23,6 +23,7 @@ const UserProfile = () => {
   const {id} = useParams();
   const [user, setUser] = useState({firstName: 'juan', lastName: 'dsa', email: 'asdasd'});
   const [posts, setPosts] = useState();
+  const [following, setFollowing] = useState(false);
 
   useEffect(() => {
     axios.get(userUrl + 'user/' + id)
@@ -35,6 +36,14 @@ const UserProfile = () => {
         setPosts(response.data);
       });
   });
+
+  const follow = () => {
+    setFollowing(true);
+  }
+
+  const unfollow = () => {
+    setFollowing(false);
+  }
 
   if (user && posts) return (
     <>
@@ -49,7 +58,8 @@ const UserProfile = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Follow</Button>
+          {following ? <Button onClick={unfollow} size="small">Unfollow</Button> :
+            <Button onClick={follow} size="small">Follow</Button>}
         </CardActions>
       </Card>
       <Feed cards={posts}/>
