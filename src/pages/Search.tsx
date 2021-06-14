@@ -31,7 +31,8 @@ const Search = () => {
   function handleSubmit(event) {
     event.preventDefault();
 
-    axios.get(userUrl + 'post/followed', {params: {input: input}})
+    axios.get(userUrl + 'user/getUserByName',
+      {data: {name: input}})
       .then(response => {
         setUsers(response.data);
       });
@@ -54,32 +55,32 @@ const Search = () => {
               setInput(e.target.value)
             }}
           />
-          <Button>
+          <Button type={"submit"}>
             Search
           </Button>
         </div>
-        <Grid container spacing={1}>
-          <Grid container item xs={12} spacing={3}>
-            {users.map(user => (
-              <Grid item key={user.id} xs={12} sm={6} md={4}>
-                <Card className={classes.root}>
-                  <Link to={'/user/'+user.id}>
-                    <CardHeader
-                      avatar={
-                        <Avatar aria-label="recipe" className={classes.avatar}>
-                          {user.firstName.charAt(0)}
-                        </Avatar>
-                      }
-                      title={user.firstName}
-                      subheader={user.email}
-                    />
-                  </Link>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
       </form>
+      <Grid container spacing={1}>
+        <Grid container item xs={12} spacing={3}>
+          {users.map(user => (
+            <Grid item key={user.id} xs={12} sm={6} md={4}>
+              <Card className={classes.root}>
+                <Link to={'/user/' + user.id}>
+                  <CardHeader
+                    avatar={
+                      <Avatar aria-label="recipe" className={classes.avatar}>
+                        {user.firstName.charAt(0)}
+                      </Avatar>
+                    }
+                    title={user.firstName}
+                    subheader={user.email}
+                  />
+                </Link>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
     </>
   );
 }

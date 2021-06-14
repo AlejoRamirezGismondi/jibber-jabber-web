@@ -37,12 +37,6 @@ const Post = (props) => {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon/>
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon/>
-        </IconButton>
-        <IconButton aria-label="comment">
-          <ChatBubbleIcon/>
-        </IconButton>
       </CardActions>
     </PostCard>
   );

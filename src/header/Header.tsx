@@ -41,8 +41,8 @@ const Header = () => {
         Jibber Jabber
       </Typography>
       <div className={classes.rightButtons}>
-        <IconButton>
-          <SearchIcon href={'/search'}/>
+        <IconButton href={'/search'}>
+          <SearchIcon/>
         </IconButton>
         {getToken() ?
           <>

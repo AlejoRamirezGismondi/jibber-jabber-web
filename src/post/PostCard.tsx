@@ -35,11 +35,6 @@ const PostCard = (props) => {
             U
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon/>
-          </IconButton>
-        }
         title={props.userName}
         subheader={props.date}
       />

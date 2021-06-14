@@ -8,6 +8,7 @@ import AuthRoute from "./AuthRoute";
 import Search from "../pages/Search";
 import DangerZone from "../pages/DangerZone";
 import UserProfile from "../pages/UserProfile";
+import Home from "../pages/Home";
 
 const Router = () => {
 
@@ -17,9 +18,10 @@ const Router = () => {
         <ReverseAuthRoute path={"/login"} component={Login}/>
         <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
-        <Route path={"/change-password"} component={DangerZone}/>
+        <AuthRoute path={"/change-password"} component={DangerZone}/>
         <Route path={'/user/:id'} component={UserProfile}/>
-        <Route path={"/"} component={Search}/>
+        <Route path={'/search'} component={Search}/>
+        <AuthRoute path={"/"} component={Home}/>
       </Switch>
     </BrowserRouter>
   )

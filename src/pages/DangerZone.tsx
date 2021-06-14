@@ -43,10 +43,8 @@ const DangerZone = () => {
     let token = getToken();
 
     axios.post(userUrl + `user/changePassword`, {
-      data: {
-        oldPassword: oldPassword,
-        newPassword: newPassword
-      }
+      oldPassword: oldPassword,
+      newPassword: newPassword
     }, {
       headers: {
         'Authorization': `Bearer ${token}`
