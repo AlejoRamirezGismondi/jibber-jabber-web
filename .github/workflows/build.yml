@@ -15,12 +15,6 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Tests
-        run: npm test
-
   push_to_registry:
     name: Push Docker image to GitHub Packages
     needs: build
