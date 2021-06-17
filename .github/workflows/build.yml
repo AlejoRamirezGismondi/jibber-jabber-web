@@ -67,18 +67,7 @@ jobs:
       - name: Deploy
         uses: fifsky/ssh-action@master
         with:
-          command: |
-            cd /jj/jibber-jabber-infra
-            docker-compose down
-            echo "Docker-compose Down"
-            echo ${{ secrets.READ_PACKAGE_TOKEN }} | docker login --username AlejoRamirezGismondi --password-stdin
-            echo "Docker login"
-            docker-compose pull
-            echo "Docker-compose pull"
-            docker-compose up
-            echo "Docker-compose up"
-            docker logout
-            echo "Docker logout"
+          command: /scripts/restart.sh
           host: ${{ env.VM_IP }}
           user: ${{ env.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
