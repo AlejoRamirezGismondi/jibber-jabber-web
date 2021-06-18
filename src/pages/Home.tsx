@@ -35,12 +35,16 @@ const Home = () => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    axios.get(postUrl+`post`)
+    let token = getToken();
+
+    axios.get(postUrl+`post/following`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(res => {
         setCards(res.data)
       });
-
-    let token = getToken();
 
     axios.get(userUrl + 'user', {
       headers: {
