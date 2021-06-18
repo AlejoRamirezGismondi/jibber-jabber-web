@@ -23,7 +23,10 @@ const UserProfile = () => {
   const classes = useStyles();
   const {id} = useParams();
   const [user, setUser] = useState({firstName: 'juan', lastName: 'dsa', email: 'asdasd'});
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([
+    {id: '1', text: 'dasdas dasdasdsad', date: 'dasdasd', userName: 'pepe'},
+    {id: '1', text: 'dasdas dasdasdsad', date: 'dasdasd', userName: 'pepe'}
+  ]);
   const [following, setFollowing] = useState(false);
   let token = getToken();
 
@@ -49,7 +52,7 @@ const UserProfile = () => {
   }, [token, id]);
 
   const follow = () => {
-    axios.post(userUrl + 'user/follow/' + id, {
+    axios.post(userUrl + 'user/follow/' + id, {id: '2', followId: '1'}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -59,7 +62,7 @@ const UserProfile = () => {
   }
 
   const unfollow = () => {
-    axios.post(userUrl + 'user/unfollow/' + id, {
+    axios.post(userUrl + 'user/unfollow/' + id, {id: '2', followId: '1'}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -74,10 +77,13 @@ const UserProfile = () => {
       <Card className={classes.root}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
-            {user.firstName} {user.lastName}
+            First Name: {user.firstName}
+          </Typography>
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            Second Name: {user.lastName}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
-            {user.email}
+            Email: {user.email}
           </Typography>
         </CardContent>
         <CardActions>

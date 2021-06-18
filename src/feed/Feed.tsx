@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Prop {
-  cards: [GettedPost],
+  cards: GettedPost[],
   own: boolean
 }
 
