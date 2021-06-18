@@ -19,6 +19,7 @@ const Router = () => {
         <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
         <AuthRoute path={"/change-password"} component={DangerZone}/>
+        <AuthRoute path={"/chat/:id"} component={DangerZone}/>
         <Route path={'/user/:id'} component={UserProfile}/>
         <Route path={'/search'} component={Search}/>
         <AuthRoute path={"/"} component={Home}/>
