@@ -5,6 +5,7 @@ import axios from "axios";
 import {postUrl, userUrl} from "../utils/http";
 import Feed from "../feed/Feed";
 import {Button, Card, CardActions, CardContent, makeStyles, Typography} from "@material-ui/core";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles({
   root: {
@@ -24,24 +25,46 @@ const UserProfile = () => {
   const [user, setUser] = useState({firstName: 'juan', lastName: 'dsa', email: 'asdasd'});
   const [posts, setPosts] = useState();
   const [following, setFollowing] = useState(false);
+  let token = getToken();
 
   useEffect(() => {
-    axios.get(userUrl + 'user/' + id)
+
+    axios.get(userUrl + 'user/' + id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(response => {
         setUser(response.data);
       });
 
-    axios.get(postUrl + 'user/' + id)
+    axios.get(postUrl + 'user/' + id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(response => {
         setPosts(response.data);
       });
-  });
+  }, [token, id]);
 
   const follow = () => {
+    axios.post(userUrl + 'user/follow/' + id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
     setFollowing(true);
   }
 
   const unfollow = () => {
+    axios.post(userUrl + 'user/unfollow/' + id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
     setFollowing(false);
   }
 
