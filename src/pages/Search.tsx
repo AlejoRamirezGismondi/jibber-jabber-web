@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
     searchBar: {
       width: '90%',
     }
-  }))
+  }));
 
 const Search = () => {
   const classes = useStyles();
