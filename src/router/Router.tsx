@@ -9,6 +9,7 @@ import Search from "../pages/Search";
 import DangerZone from "../pages/DangerZone";
 import UserProfile from "../pages/UserProfile";
 import Home from "../pages/Home";
+import MyPosts from "../pages/MyPosts";
 
 const Router = () => {
 
@@ -20,6 +21,7 @@ const Router = () => {
         <AuthRoute path={'/profile'} component={Profile}/>
         <AuthRoute path={"/change-password"} component={DangerZone}/>
         <AuthRoute path={"/chat/:id"} component={DangerZone}/>
+        <AuthRoute path={"/my-posts"} component={MyPosts}/>
         <Route path={'/user/:id'} component={UserProfile}/>
         <Route path={'/search'} component={Search}/>
         <AuthRoute path={"/"} component={Home}/>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   CardActions,
   CardContent,
@@ -9,8 +9,11 @@ import {
 } from "@material-ui/core";
 import PostCard from "./PostCard";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import axios from "axios";
+import {Delete} from "@material-ui/icons";
+import {postUrl} from "../utils/http";
+import {getToken} from "../utils/token";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +28,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Post = (props) => {
   const classes = useStyles();
+  const [liked, setLiked] = useState(false);
+  const history = useHistory();
+  const id = '1'
+
+  const favClicked = () => {
+    if (liked) {
+      axios.put(postUrl + 'post/like/' + id).then(() => {})
+    } else {
+      axios.put(postUrl + 'post/unlike/' + id).then(() => {})
+    }
+    setLiked(!liked);
+  }
+
+  const deleteClicked = () => {
+    let token = getToken();
+
+    axios.delete(postUrl + 'post/' + id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then(() => {
+      history.push('/my-posts');
+    })
+  }
 
   return (
     <PostCard date={props.date} userName={props.userName}>
@@ -34,9 +61,16 @@ const Post = (props) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton color={liked ? 'primary' : 'default'} aria-label="add to favorites" onClick={favClicked}>
           <FavoriteIcon/>
         </IconButton>
+        {props.own ?
+          <IconButton aria-label="delete" onClick={deleteClicked}>
+            <Delete/>
+          </IconButton>
+        :
+        <></>
+        }
       </CardActions>
     </PostCard>
   );

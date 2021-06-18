@@ -54,13 +54,14 @@ const Home = () => {
 
   if (!user || !cards) return(<div>
     <Header/>
+    <h1>Loading...</h1>
   </div>)
 
   return (
     <div>
       <Header/>
       <NewPost className={classes.newPost} username={user.firstName}/>
-      <Feed cards={[{id: "0", text: "text", date: "date", userName: "username"}]}/>
+      <Feed own={false} cards={[{id: "0", text: "text", date: "date", userName: "username"}]}/>
     </div>
   );
 }

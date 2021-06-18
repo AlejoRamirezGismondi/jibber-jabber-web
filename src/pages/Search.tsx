@@ -6,6 +6,7 @@ import {userUrl} from "../utils/http";
 import Grid from "@material-ui/core/Grid";
 import {Avatar, Button, Card, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,8 +32,15 @@ const Search = () => {
   function handleSubmit(event) {
     event.preventDefault();
 
+    let token = getToken();
+
     axios.get(userUrl + 'user/getUserByName',
-      {data: {name: input}})
+      {
+        data: {name: input},
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      })
       .then(response => {
         setUsers(response.data);
       });

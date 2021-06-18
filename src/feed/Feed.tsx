@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Prop {
-  cards: [GettedPost]
+  cards: [GettedPost],
+  own: boolean
 }
 
 const Feed = (props: Prop) => {
@@ -55,7 +56,7 @@ const Feed = (props: Prop) => {
           <Grid container spacing={4}>
             {props.cards.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Post text={text} date={date} userName={userName}/>
+                <Post own={props.own} text={text} date={date} userName={userName}/>
               </Grid>
             ))}
           </Grid>

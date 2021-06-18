@@ -62,7 +62,7 @@ const UserProfile = () => {
             <Button onClick={follow} size="small">Follow</Button>}
         </CardActions>
       </Card>
-      <Feed cards={posts}/>
+      <Feed own={false} cards={posts}/>
     </>
   );
 

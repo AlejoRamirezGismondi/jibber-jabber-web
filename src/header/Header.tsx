@@ -49,6 +49,9 @@ const Header = () => {
           <Button variant="outlined" size="small" className={classes.button} href={"/profile"}>
             My Profile
           </Button>
+            <Button variant="outlined" size="small" className={classes.button} href={"/my-posts"}>
+              My Posts
+            </Button>
           <Button variant="outlined" size="small" className={classes.button} onClick={logout}>
             Logout
           </Button>
