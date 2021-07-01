@@ -51,7 +51,7 @@ const Login = () => {
 
     axios.post(userUrl+`user/login`, user)
       .then(response => {
-        document.cookie=`token=${response.data};`
+        document.cookie=`token=${response.data};Secure;`
         history.push('/');
       });
   }
