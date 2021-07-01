@@ -34,11 +34,11 @@ const Search = () => {
 
     let token = getToken();
 
-    axios.get(userUrl + 'user/getUserByName',
+    axios.post(userUrl + 'user/getUserByUserName', input,
       {
-        data: {name: input},
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "text/plain"
         },
       })
       .then(response => {
