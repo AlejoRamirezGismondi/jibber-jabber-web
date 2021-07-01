@@ -6,6 +6,7 @@ import {postUrl, userUrl} from "../utils/http";
 import Feed from "../feed/Feed";
 import {Button, Card, CardActions, CardContent, makeStyles, Typography} from "@material-ui/core";
 import {getToken} from "../utils/token";
+import {User} from "../models/User";
 
 const useStyles = makeStyles({
   root: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles({
 const UserProfile = () => {
   const classes = useStyles();
   const {id} = useParams();
-  const [user, setUser] = useState({firstName: 'juan', lastName: 'dsa', email: 'asdasd'});
+  const [user, setUser] = useState<User>();
   const [posts, setPosts] = useState([]);
   const [following, setFollowing] = useState(false);
   let token = getToken();
@@ -51,7 +52,7 @@ const UserProfile = () => {
   }, [token, id]);
 
   const follow = () => {
-    axios.post(userUrl + 'user/follow/' + id, {id: '2', followId: '1'}, {
+    axios.post(userUrl + 'user/follow/' + id, {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -61,7 +62,7 @@ const UserProfile = () => {
   }
 
   const unfollow = () => {
-    axios.post(userUrl + 'user/unfollow/' + id, {id: '2', followId: '1'}, {
+    axios.post(userUrl + 'user/unfollow/' + id, {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
