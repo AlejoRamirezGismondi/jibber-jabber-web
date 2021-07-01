@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   CardActions,
   CardContent,
@@ -57,6 +57,7 @@ const NewPost = (props) => {
       .then(res => {
         console.log(res);
         console.log(res.data);
+        setText("");
       })
   }
 
@@ -70,6 +71,7 @@ const NewPost = (props) => {
             variant="outlined"
             className={classes.textField}
             inputProps={{ maxLength: maxLength }}
+            value={text}
             onChange={(t) => {setText(t.target.value)}}
           />
         </CardContent>
