@@ -25,6 +25,10 @@ const MyPosts = () => {
 
   const [cards, setCards] = useState<GettedPost[]>([]);
 
+  const postDeleted = deletedId => {
+    setCards(cards.filter(card => card.id !== deletedId));
+  }
+
   useEffect(() => {
 
     let token = getToken();
@@ -49,7 +53,7 @@ const MyPosts = () => {
   return (
     <div>
       <Header/>
-      <Feed own={true} cards={cards}/>
+      <Feed onDelete={deletedId => postDeleted(deletedId)} own={true} cards={cards}/>
     </div>
   );
 }

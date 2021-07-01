@@ -23,10 +23,7 @@ const UserProfile = () => {
   const classes = useStyles();
   const {id} = useParams();
   const [user, setUser] = useState({firstName: 'juan', lastName: 'dsa', email: 'asdasd'});
-  const [posts, setPosts] = useState([
-    {id: '1', text: 'dasdas dasdasdsad', date: 'dasdasd', userName: 'pepe'},
-    {id: '1', text: 'dasdas dasdasdsad', date: 'dasdasd', userName: 'pepe'}
-  ]);
+  const [posts, setPosts] = useState([]);
   const [following, setFollowing] = useState(false);
   let token = getToken();
 
@@ -71,6 +68,10 @@ const UserProfile = () => {
     setFollowing(false);
   }
 
+  const postDeleted = deletedId => {
+    setPosts(posts.filter(card => card.id !== deletedId));
+  }
+
   if (user && posts) return (
     <>
       <Header/>
@@ -91,7 +92,7 @@ const UserProfile = () => {
             <Button onClick={follow} size="small">Follow</Button>}
         </CardActions>
       </Card>
-      <Feed own={false} cards={posts}/>
+      <Feed onDelete={deletedId => postDeleted(deletedId)} own={false} cards={posts}/>
     </>
   );
 

@@ -13,7 +13,6 @@ import axios from "axios";
 import {Delete} from "@material-ui/icons";
 import {postUrl} from "../utils/http";
 import {getToken} from "../utils/token";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,23 +25,30 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Post = (props) => {
+type Props = {
+  id: string
+  date: string
+  userName: string
+  own: boolean
+  text: string
+  onDelete: (id: string) => void
+}
+
+const Post = (props: Props) => {
   const classes = useStyles();
   const [liked, setLiked] = useState(false);
-  const history = useHistory();
-  const id = '1'
 
   const favClicked = () => {
     let token = getToken();
 
-    if (liked) {
-      axios.put(postUrl + 'post/like/' + id, {}, {
+    if (!liked) {
+      axios.put(postUrl + 'post/like/' + props.id, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
       }).then(() => {})
     } else {
-      axios.put(postUrl + 'post/unlike/' + id, {}, {
+      axios.put(postUrl + 'post/unlike/' + props.id, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -54,12 +60,12 @@ const Post = (props) => {
   const deleteClicked = () => {
     let token = getToken();
 
-    axios.delete(postUrl + 'post/' + id, {
+    axios.delete(postUrl + 'post/' + props.id, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
     }).then(() => {
-      history.push('/my-posts');
+      props.onDelete(props.id);
     })
   }
 

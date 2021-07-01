@@ -43,7 +43,9 @@ const Home = () => {
       }
     })
       .then(res => {
-        setCards(res.data)
+        setCards(res.data.map(card => {
+          return {id: card.id, text: card.body, date: '5/15/2021, 12:23:43 AM', userName: 'User Name'}
+        }))
       });
 
     axios.get(userUrl + 'user', {
@@ -56,6 +58,10 @@ const Home = () => {
       })
   }, [])
 
+  const postDeleted = deletedId => {
+    setCards(cards.filter(card => card.id !== deletedId));
+  }
+
   if (!user || !cards) return(<div>
     <Header/>
     <h1>Loading...</h1>
@@ -65,7 +71,7 @@ const Home = () => {
     <div>
       <Header/>
       <NewPost className={classes.newPost} username={user.firstName}/>
-      <Feed own={false} cards={[{id: "0", text: "text", date: "date", userName: "username"}]}/>
+      <Feed onDelete={deletedId => {postDeleted(deletedId)}} own={false} cards={cards}/>
     </div>
   );
 }
