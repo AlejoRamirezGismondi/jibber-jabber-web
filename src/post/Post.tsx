@@ -33,10 +33,20 @@ const Post = (props) => {
   const id = '1'
 
   const favClicked = () => {
+    let token = getToken();
+
     if (liked) {
-      axios.put(postUrl + 'post/like/' + id).then(() => {})
+      axios.put(postUrl + 'post/like/' + id, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then(() => {})
     } else {
-      axios.put(postUrl + 'post/unlike/' + id).then(() => {})
+      axios.put(postUrl + 'post/unlike/' + id, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then(() => {})
     }
     setLiked(!liked);
   }

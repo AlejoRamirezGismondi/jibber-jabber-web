@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react'
 import {createStyles, makeStyles, Theme} from "@material-ui/core";
 import {GettedPost} from "./Home";
 import axios from "axios";
-import {postUrl, userUrl} from "../utils/http";
+import {postUrl} from "../utils/http";
 import {getToken} from "../utils/token";
 import Header from "../header/Header";
-import NewPost from "../post/NewPost";
 import Feed from "../feed/Feed";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,7 +24,6 @@ const MyPosts = () => {
   const classes = useStyles();
 
   const [cards, setCards] = useState<GettedPost[]>([]);
-  const username = 'pepe'
 
   useEffect(() => {
 
@@ -37,7 +35,9 @@ const MyPosts = () => {
       },
     })
       .then(res => {
-        setCards(res.data)
+        setCards(res.data.map(card => {
+          return {id: card.id, text: card.body, date: '5/15/2021, 12:23:43 AM', userName: 'User Name'}
+        }))
       });
   }, []);
 
@@ -49,7 +49,7 @@ const MyPosts = () => {
   return (
     <div>
       <Header/>
-      <Feed own={true} cards={[{id: "0", text: "text", date: "date", userName: "username"}]}/>
+      <Feed own={true} cards={cards}/>
     </div>
   );
 }
