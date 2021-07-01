@@ -49,7 +49,7 @@ const NewPost = (props) => {
   function createNewPost() {
     let token = getToken();
 
-    axios.post(postUrl+`post`, { title:'', body:text }, {
+    axios.post(postUrl+`post`, { title:'', body:text, date:new Date().toLocaleDateString() }, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
