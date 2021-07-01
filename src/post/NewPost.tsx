@@ -11,6 +11,7 @@ import SendIcon from '@material-ui/icons/Send';
 import PostCard from "./PostCard";
 import axios from "axios";
 import {postUrl} from "../utils/http";
+import {getToken} from "../utils/token";
 
 const maxRows: number = 4;
 const maxLength: number = 180;
@@ -45,14 +46,14 @@ const NewPost = (props) => {
 
   const [text, setText] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    createNewPost();
-  }
-
   function createNewPost() {
-    axios.post(postUrl+`post`, { title:'', author:props.username, body:text })
+    let token = getToken();
+
+    axios.post(postUrl+`post`, { title:'', body:text }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -60,7 +61,7 @@ const NewPost = (props) => {
   }
 
   return (
-    <form className={props.className} onSubmit={handleSubmit}>
+    <div className={props.className}>
       <PostCard className={classes.postCard} date={date.toLocaleString()} userName={userName}>
         <CardContent>
           <TextField
@@ -73,12 +74,12 @@ const NewPost = (props) => {
           />
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="post" className={classes.sendButton}>
+          <IconButton aria-label="post" className={classes.sendButton} onClick={() => {createNewPost()}}>
             <SendIcon/>
           </IconButton>
         </CardActions>
       </PostCard>
-    </form>
+    </div>
   );
 }
 
