@@ -38,13 +38,15 @@ const UserProfile = () => {
         setUser(response.data);
       });
 
-    axios.get(postUrl + 'user/' + id, {
+    axios.get(postUrl + 'post/author/' + id, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
-      .then(response => {
-        setPosts(response.data);
+      .then(res => {
+        setPosts(res.data.map(card => {
+          return {id: card.id, text: card.body, date: '5/15/2021, 12:23:43 AM', userName: 'User Name'}
+        }))
       });
   }, [token, id]);
 
