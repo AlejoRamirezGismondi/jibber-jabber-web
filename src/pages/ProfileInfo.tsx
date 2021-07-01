@@ -64,10 +64,9 @@ const ProfileInfo = (props: User) => {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
-      .then(response => {
-        document.cookie = `token=${response.data};`
-      });
+    }).then(() => {
+      setEditEnabled(false);
+    });
   }
 
   if (editEnabled) {
