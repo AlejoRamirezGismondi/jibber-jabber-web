@@ -37,6 +37,7 @@ const UserProfile = () => {
     })
       .then(response => {
         setUser(response.data);
+        setFollowing(response.data.following);
       });
 
     axios.get(postUrl + 'post/author/' + id, {
