@@ -33,8 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const DangerZone = () => {
   const [newPassword, setNewPassword] = useState<string>();
   const [oldPassword, setOldPassword] = useState<string>();
-  const newPasswordInput = useRef(null);
-  const oldPasswordInput = useRef(null);
   const classes = useStyles();
 
   function handleSubmit(event) {
@@ -51,8 +49,8 @@ const DangerZone = () => {
       }
     })
       .then(() => {
-        newPasswordInput.current.value = '';
-        oldPasswordInput.current.value = '';
+        setNewPassword("");
+        setOldPassword("");
       });
   }
 
@@ -67,7 +65,7 @@ const DangerZone = () => {
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
-              ref={oldPasswordInput}
+              value={oldPassword}
               variant="outlined"
               margin="normal"
               required
@@ -80,7 +78,7 @@ const DangerZone = () => {
               onChange={(e) => {setOldPassword(e.target.value)}}
             />
             <TextField
-              ref={newPasswordInput}
+              value={newPassword}
               variant="outlined"
               margin="normal"
               required

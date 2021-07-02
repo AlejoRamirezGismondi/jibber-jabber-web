@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
@@ -35,17 +35,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Prop {
-  cards: [GettedPost]
+  cards: GettedPost[],
+  own: boolean,
+  onDelete: (id: string) => void
 }
 
 const Feed = (props: Prop) => {
   const classes = useStyles();
-
-  const text: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore\n' +
-    '          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n' +
-    '          consequat.';
-  const date: string = '5/15/2021, 12:23:43 AM';
-  const userName: string = 'User Name';
 
   return (
     <React.Fragment>
@@ -55,7 +51,7 @@ const Feed = (props: Prop) => {
           <Grid container spacing={4}>
             {props.cards.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Post text={text} date={date} userName={userName}/>
+                <Post liked={card.liked} likes={card.likes} onDelete={deletedId => {props.onDelete(deletedId)}} own={props.own} id={card.id} text={card.text} date={card.date} userName={card.userName}/>
               </Grid>
             ))}
           </Grid>

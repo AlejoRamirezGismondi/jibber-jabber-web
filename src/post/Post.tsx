@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   CardActions,
   CardContent,
@@ -9,8 +9,10 @@ import {
 } from "@material-ui/core";
 import PostCard from "./PostCard";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import axios from "axios";
+import {Delete} from "@material-ui/icons";
+import {postUrl} from "../utils/http";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,8 +25,54 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Post = (props) => {
+type Props = {
+  id: string
+  date: string
+  userName: string
+  likes: number
+  liked: boolean
+  own: boolean
+  text: string
+  onDelete: (id: string) => void
+}
+
+const Post = (props: Props) => {
   const classes = useStyles();
+  const [liked, setLiked] = useState(props.liked);
+  const [likes, setLikes] = useState(props.likes);
+
+  const favClicked = () => {
+    let token = getToken();
+
+    if (!liked) {
+      axios.put(postUrl + 'post/like/' + props.id, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then(() => {})
+      setLikes(likes+1);
+    } else {
+      axios.put(postUrl + 'post/unlike/' + props.id, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then(() => {})
+      setLikes(likes-1);
+    }
+    setLiked(!liked);
+  }
+
+  const deleteClicked = () => {
+    let token = getToken();
+
+    axios.delete(postUrl + 'post/' + props.id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then(() => {
+      props.onDelete(props.id);
+    })
+  }
 
   return (
     <PostCard date={props.date} userName={props.userName}>
@@ -34,9 +82,17 @@ const Post = (props) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton color={liked ? 'primary' : 'default'} aria-label="add to favorites" onClick={favClicked}>
           <FavoriteIcon/>
+          {likes}
         </IconButton>
+        {props.own ?
+          <IconButton aria-label="delete" onClick={deleteClicked}>
+            <Delete/>
+          </IconButton>
+        :
+        <></>
+        }
       </CardActions>
     </PostCard>
   );

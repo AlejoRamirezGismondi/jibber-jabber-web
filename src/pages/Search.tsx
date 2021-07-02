@@ -6,6 +6,7 @@ import {userUrl} from "../utils/http";
 import Grid from "@material-ui/core/Grid";
 import {Avatar, Button, Card, CardHeader, createStyles, makeStyles, Theme} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {getToken} from "../utils/token";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,15 +27,22 @@ const useStyles = makeStyles((theme: Theme) =>
 const Search = () => {
   const classes = useStyles();
   const [input, setInput] = useState<string>('');
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(undefined);
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    axios.get(userUrl + 'user/getUserByName',
-      {data: {name: input}})
+    let token = getToken();
+
+    axios.post(userUrl + 'user/getUserByUserName', input,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "text/plain"
+        },
+      })
       .then(response => {
-        setUsers(response.data);
+        setUser(response.data);
       });
   }
 
@@ -62,7 +70,7 @@ const Search = () => {
       </form>
       <Grid container spacing={1}>
         <Grid container item xs={12} spacing={3}>
-          {users.map(user => (
+          { user ?
             <Grid item key={user.id} xs={12} sm={6} md={4}>
               <Card className={classes.root}>
                 <Link to={'/user/' + user.id}>
@@ -78,7 +86,9 @@ const Search = () => {
                 </Link>
               </Card>
             </Grid>
-          ))}
+            :
+            <></>
+          }
         </Grid>
       </Grid>
     </>

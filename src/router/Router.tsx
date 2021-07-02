@@ -9,6 +9,7 @@ import Search from "../pages/Search";
 import DangerZone from "../pages/DangerZone";
 import UserProfile from "../pages/UserProfile";
 import Home from "../pages/Home";
+import MyPosts from "../pages/MyPosts";
 import ChatFeed from "../chat/ChatFeed";
 import Chat from "../chat/Chat";
 
@@ -21,6 +22,8 @@ const Router = () => {
         <ReverseAuthRoute path={"/register"} component={Register}/>
         <AuthRoute path={'/profile'} component={Profile}/>
         <AuthRoute path={"/change-password"} component={DangerZone}/>
+        <AuthRoute path={"/chat/:id"} component={DangerZone}/>
+        <AuthRoute path={"/my-posts"} component={MyPosts}/>
         <AuthRoute path={"/chat/:id"} component={Chat}/>
         <AuthRoute path={"/chats"} component={ChatFeed}/>
         <Route path={'/user/:id'} component={UserProfile}/>

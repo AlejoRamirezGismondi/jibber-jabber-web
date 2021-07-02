@@ -54,20 +54,19 @@ const ProfileInfo = (props: User) => {
     let token = getToken();
 
     axios.post(userUrl + `user/edit`, {
-      data: {
-        firstName: firstName,
-        lastName: lastName,
-        age: age,
-        email: email
-      }
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
+      email: email,
+      userName: '',
+      id: 0
     }, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
-      .then(response => {
-        document.cookie = `token=${response.data};`
-      });
+    }).then(() => {
+      setEditEnabled(false);
+    });
   }
 
   if (editEnabled) {

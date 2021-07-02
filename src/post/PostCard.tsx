@@ -4,11 +4,10 @@ import {
   Card,
   CardHeader,
   createStyles,
-  IconButton, makeStyles,
+  makeStyles,
   Theme
 } from "@material-ui/core";
 import {red} from "@material-ui/core/colors";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
