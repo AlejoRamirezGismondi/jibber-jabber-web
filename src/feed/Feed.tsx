@@ -51,7 +51,7 @@ const Feed = (props: Prop) => {
           <Grid container spacing={4}>
             {props.cards.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Post onDelete={deletedId => {props.onDelete(deletedId)}} own={props.own} id={card.id} text={card.text} date={card.date} userName={card.userName}/>
+                <Post liked={card.liked} likes={card.likes} onDelete={deletedId => {props.onDelete(deletedId)}} own={props.own} id={card.id} text={card.text} date={card.date} userName={card.userName}/>
               </Grid>
             ))}
           </Grid>

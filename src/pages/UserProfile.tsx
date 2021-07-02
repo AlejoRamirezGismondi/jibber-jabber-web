@@ -46,7 +46,7 @@ const UserProfile = () => {
     })
       .then(res => {
         setPosts(res.data.map(card => {
-          return {id: card.id, text: card.body, date: card.date, userName: card.firstName}
+          return {id: card.id, text: card.body, date: card.date, userName: card.firstName, likes: card.likes, liked: card.likedByUser}
         }))
       });
   }, [token, id]);

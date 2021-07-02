@@ -25,7 +25,9 @@ export interface GettedPost {
   id: string,
   text: string,
   date: string,
-  userName: string
+  userName: string,
+  likes: number,
+  liked: boolean
 }
 
 const Home = () => {
@@ -44,7 +46,7 @@ const Home = () => {
     })
       .then(res => {
         setCards(res.data.map(card => {
-          return {id: card.id, text: card.body, date: card.date, userName: card.firstName}
+          return {id: card.id, text: card.body, date: card.date, userName: card.firstName, liked: card.likedByUser, likes: card.likes}
         }))
       });
 

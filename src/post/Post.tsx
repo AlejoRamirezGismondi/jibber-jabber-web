@@ -29,6 +29,8 @@ type Props = {
   id: string
   date: string
   userName: string
+  likes: number
+  liked: boolean
   own: boolean
   text: string
   onDelete: (id: string) => void
@@ -36,7 +38,8 @@ type Props = {
 
 const Post = (props: Props) => {
   const classes = useStyles();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(props.liked);
+  const [likes, setLikes] = useState(props.likes);
 
   const favClicked = () => {
     let token = getToken();
@@ -47,12 +50,14 @@ const Post = (props: Props) => {
           'Authorization': `Bearer ${token}`
         },
       }).then(() => {})
+      setLikes(likes+1);
     } else {
       axios.put(postUrl + 'post/unlike/' + props.id, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
       }).then(() => {})
+      setLikes(likes-1);
     }
     setLiked(!liked);
   }
@@ -79,6 +84,7 @@ const Post = (props: Props) => {
       <CardActions disableSpacing>
         <IconButton color={liked ? 'primary' : 'default'} aria-label="add to favorites" onClick={favClicked}>
           <FavoriteIcon/>
+          {likes}
         </IconButton>
         {props.own ?
           <IconButton aria-label="delete" onClick={deleteClicked}>
