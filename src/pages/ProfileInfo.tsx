@@ -54,11 +54,13 @@ const ProfileInfo = (props: User) => {
     let token = getToken();
 
     axios.post(userUrl + `user/edit`, {
-      data: {
+      user: {
         firstName: firstName,
         lastName: lastName,
         age: age,
-        email: email
+        email: email,
+        userName: '',
+        id: 0
       }
     }, {
       headers: {
