@@ -15,18 +15,53 @@ import {User} from "../models/User";
 import SendIcon from "@material-ui/icons/Send";
 import './Chat.css'
 
-const Chat = (props) => {
-  const [user, setUser] = useState<User>({
+type ChatUser = {
+  id: number,
+  firstName: string,
+  lastName: string,
+  age: string,
+  email: string,
+  following: boolean,
+  newMessages: number
+}
+
+const Chat = () => {
+  const [user, setUser] = useState<ChatUser>({
     firstName: 'pepe',
     id: 0,
     following: false,
     email: 'email',
     lastName: 'lastname',
-    age: '30'
+    age: '30',
+    newMessages: 2
   });
   const [text, setText] = useState("");
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [activeContact, setActiveContact] = useState({id: '1', name: 'activeContact juan'});
+  const [contacts, setContacts] = useState<ChatUser[]>([{
+    newMessages: 2,
+    id: 1,
+    firstName: 'activeContact juan',
+    age: '30',
+    lastName: 'lastname',
+    email: 'email',
+    following: true
+  },{
+    newMessages: 2,
+    id: 3,
+    firstName: 'jaime',
+    age: '30',
+    lastName: 'adsdasdasd',
+    email: 'dasdasdas',
+    following: true
+  }]);
+  const [activeContact, setActiveContact] = useState<ChatUser>({
+    newMessages: 2,
+    id: 1,
+    firstName: 'activeContact juan',
+    age: '30',
+    lastName: 'lastname',
+    email: 'email',
+    following: true
+  });
   const [messages, setMessages] = useState<any[]>([]);
   let stompClient = null;
 
@@ -166,11 +201,9 @@ const Chat = (props) => {
                 }
               >
                 <div className="wrap">
-                  <span className="contact-status online"></span>
-                  <img id={contact.id} src={contact.profilePicture} alt=""/>
                   <div className="meta">
-                    <p className="name">{contact.name}</p>
-                    {contact.newMessages !== undefined &&
+                    <p className="name">{contact.firstName + ' ' + contact.lastName}</p>
+                    {contact.newMessages &&
                     contact.newMessages > 0 && (
                       <p className="preview">
                         {contact.newMessages} new messages
@@ -185,8 +218,7 @@ const Chat = (props) => {
       </div>
       <div className="content">
         <div className="contact-profile">
-          {/*<img src={activeContact && activeContact.profilePicture} alt="" />*/}
-          <p>{activeContact && activeContact.name}</p>
+          <p>{activeContact && activeContact.firstName + ' ' + activeContact.lastName}</p>
         </div>
         <ScrollToBottom classNameName="messages">
           <ul>
