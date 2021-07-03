@@ -1,56 +1,79 @@
-import React, { useEffect, useState } from "react";
-import { Button, message } from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, message} from "antd";
 import {
   getUsers,
   countNewMessages,
   findChatMessages,
   findChatMessage,
 } from "./ApiUtil/ApiUtil";
-import { useRecoilValue, useRecoilState } from "recoil";
-import {
-  loggedInUser,
-  chatActiveContact,
-  chatMessages,
-} from "./Atom/GlobalState";
 import ScrollToBottom from "react-scroll-to-bottom";
 import "./Chat.css";
+import axios from "axios";
+import {messageUrl, userUrl} from "../utils/http";
+import {getToken} from "../utils/token";
+import {User} from "../models/User";
+import SendIcon from "@material-ui/icons/Send";
+import './Chat.css'
 
-let stompClient = null;
 const Chat = (props) => {
-  const currentUser = {id: '1', name: 'juan'}
+  const [user, setUser] = useState<User>({
+    firstName: 'pepe',
+    id: 0,
+    following: false,
+    email: 'email',
+    lastName: 'lastname',
+    age: '30'
+  });
   const [text, setText] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [activeContact, setActiveContact] = useState({id:'1', name: 'pepe'});
-  const [messages, setMessages] = useState([]);
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [activeContact, setActiveContact] = useState({id: '1', name: 'activeContact juan'});
+  const [messages, setMessages] = useState<any[]>([]);
+  let stompClient = null;
 
   useEffect(() => {
-    connect();
-    loadContacts();
+    let token = getToken();
+
+    // const Stomp = require("stompjs");
+    // let SockJS = require("sockjs-client");
+    // SockJS = new SockJS(messageUrl + 'ws');
+    // stompClient = Stomp.over(SockJS);
+    // stompClient.connect({}, onConnected, onError);
+
+    // loadContacts();
+
+    axios.get(userUrl + 'user', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setUser(response.data);
+      });
+
+    axios.get(userUrl + 'user/all', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setContacts(response.data);
+      });
   }, []);
 
-  useEffect(() => {
-    if (activeContact === undefined) return;
-    findChatMessages(activeContact.id, currentUser.id).then((msgs) =>
-      setMessages(msgs.data)
-    );
-    loadContacts();
-  }, [activeContact]);
-
-  const connect = () => {
-    const Stomp = require("stompjs");
-    let SockJS = require("sockjs-client");
-    SockJS = new SockJS("http://localhost:8080/ws");
-    stompClient = Stomp.over(SockJS);
-    stompClient.connect({}, onConnected, onError);
-  };
+  // useEffect(() => {
+  //   if (!activeContact) return;
+  //   findChatMessages(activeContact.id, currentUser.id).then((msgs) =>
+  //     setMessages(msgs.data)
+  //   );
+  //   loadContacts();
+  // }, [activeContact]);
 
   const onConnected = () => {
-    console.log("connected");
-    console.log(currentUser);
-    stompClient.subscribe(
-      "/user/" + currentUser.id + "/queue/messages",
-      onMessageReceived
-    );
+    // console.log("connected");
+    // stompClient.subscribe(
+    //   "/user/" + user.id + "/queue/messages",
+    //   onMessageReceived
+    // );
   };
 
   const onError = (err) => {
@@ -58,59 +81,59 @@ const Chat = (props) => {
   };
 
   const onMessageReceived = (msg) => {
-    const notification = JSON.parse(msg.body);
-    const active = JSON.parse(sessionStorage.getItem("recoil-persist"))
-      .chatActiveContact;
-
-    if (active.id === notification.senderId) {
-      findChatMessage(notification.id).then((message) => {
-        const newMessages = JSON.parse(sessionStorage.getItem("recoil-persist"))
-          .chatMessages;
-        newMessages.push(message);
-        setMessages(newMessages);
-      });
-    } else {
-      message.info("Received a new message from " + notification.senderName);
-    }
-    loadContacts();
+    // const notification = JSON.parse(msg.body);
+    // const active = JSON.parse(sessionStorage.getItem("recoil-persist"))
+    //   .chatActiveContact;
+    //
+    // if (active.id === notification.senderId) {
+    //   findChatMessage(notification.id).then((message) => {
+    //     const newMessages = JSON.parse(sessionStorage.getItem("recoil-persist"))
+    //       .chatMessages;
+    //     newMessages.push(message);
+    //     setMessages(newMessages);
+    //   });
+    // } else {
+    //   message.info("Received a new message from " + notification.senderName);
+    // }
+    // loadContacts();
   };
 
   const sendMessage = (msg) => {
-    if (msg.trim() !== "") {
-      const message = {
-        senderId: currentUser.id,
-        recipientId: activeContact.id,
-        senderName: currentUser.name,
-        recipientName: activeContact.name,
-        content: msg,
-        timestamp: new Date(),
-      };
-      stompClient.send("/app/chat", {}, JSON.stringify(message));
-
-      const newMessages = [...messages];
-      newMessages.push(message);
-      setMessages(newMessages);
-    }
+    // if (msg.trim() !== "") {
+    //   const message = {
+    //     senderId: user.id,
+    //     recipientId: activeContact.id,
+    //     senderName: user.firstName,
+    //     recipientName: activeContact.name,
+    //     content: msg,
+    //     timestamp: new Date(),
+    //   };
+    //   stompClient.send("/app/chat", {}, JSON.stringify(message));
+    //
+    //   const newMessages = [...messages];
+    //   newMessages.push(message);
+    //   setMessages(newMessages);
+    // }
   };
 
   const loadContacts = () => {
-    const promise = getUsers().then((users) =>
-      users.map((contact) =>
-        countNewMessages(contact.id, currentUser.id).then((count) => {
-          contact.newMessages = count;
-          return contact;
-        })
-      )
-    );
-
-    promise.then((promises) =>
-      Promise.all(promises).then((users) => {
-        setContacts(users);
-        if (activeContact === undefined && users.length > 0) {
-          setActiveContact(users[0]);
-        }
-      })
-    );
+    // const promise = getUsers().then((users) =>
+    //   users.map((contact) =>
+    //     countNewMessages(contact.id, user.id).then((count) => {
+    //       contact.newMessages = count;
+    //       return contact;
+    //     })
+    //   )
+    // );
+    //
+    // promise.then((promises) =>
+    //   Promise.all(promises).then((users) => {
+    //     setContacts(users);
+    //     if (activeContact === undefined && users.length > 0) {
+    //       setActiveContact(users[0]);
+    //     }
+    //   })
+    // );
   };
 
   return (
@@ -118,23 +141,11 @@ const Chat = (props) => {
       <div id="sidepanel">
         <div id="profile">
           <div className="wrap">
-            <img
-              id="profile-img"
-              src={currentUser.profilePicture}
-              className="online"
-              alt=""
-            />
-            <p>{currentUser.name}</p>
+            <p>{user.firstName} {user.lastName}</p>
             <div id="status-options">
               <ul>
                 <li id="status-online" className="active">
                   <span className="status-circle"></span> <p>Online</p>
-                </li>
-                <li id="status-away">
-                  <span className="status-circle"></span> <p>Away</p>
-                </li>
-                <li id="status-busy">
-                  <span className="status-circle"></span> <p>Busy</p>
                 </li>
                 <li id="status-offline">
                   <span className="status-circle"></span> <p>Offline</p>
@@ -143,7 +154,6 @@ const Chat = (props) => {
             </div>
           </div>
         </div>
-        <div id="search" />
         <div id="contacts">
           <ul>
             {contacts.map((contact) => (
@@ -157,7 +167,7 @@ const Chat = (props) => {
               >
                 <div className="wrap">
                   <span className="contact-status online"></span>
-                  <img id={contact.id} src={contact.profilePicture} alt="" />
+                  <img id={contact.id} src={contact.profilePicture} alt=""/>
                   <div className="meta">
                     <p className="name">{contact.name}</p>
                     {contact.newMessages !== undefined &&
@@ -172,29 +182,19 @@ const Chat = (props) => {
             ))}
           </ul>
         </div>
-        <div id="bottom-bar">
-          <button id="addcontact">
-            <i className="fa fa-user fa-fw" aria-hidden="true"></i>{" "}
-            <span>Profile</span>
-          </button>
-          <button id="settings">
-            <i className="fa fa-cog fa-fw" aria-hidden="true"></i>{" "}
-            <span>Settings</span>
-          </button>
-        </div>
       </div>
       <div className="content">
         <div className="contact-profile">
-          <img src={activeContact && activeContact.profilePicture} alt="" />
+          {/*<img src={activeContact && activeContact.profilePicture} alt="" />*/}
           <p>{activeContact && activeContact.name}</p>
         </div>
         <ScrollToBottom classNameName="messages">
           <ul>
             {messages.map((msg) => (
-              <li className={msg.senderId === currentUser.id ? "sent" : "replies"}>
-                {msg.senderId !== currentUser.id && (
-                  <img src={activeContact.profilePicture} alt="" />
-                )}
+              <li className={msg.senderId === user.id ? "sent" : "replies"}>
+                {/*{msg.senderId !== user.id && (*/}
+                {/*  // <img src={activeContact.profilePicture} alt="" />*/}
+                {/*)}*/}
                 <p>{msg.content}</p>
               </li>
             ))}
@@ -216,7 +216,7 @@ const Chat = (props) => {
             />
 
             <Button
-              icon={<i className="fa fa-paper-plane" aria-hidden="true"></i>}
+              icon={<SendIcon/>}
               onClick={() => {
                 sendMessage(text);
                 setText("");
