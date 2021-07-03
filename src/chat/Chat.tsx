@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {Button} from "antd";
 import ScrollToBottom from "react-scroll-to-bottom";
 import "./Chat.css";
 import axios from "axios";
@@ -7,7 +6,7 @@ import {messageUrl, userUrl} from "../utils/http";
 import {getToken} from "../utils/token";
 import SendIcon from "@material-ui/icons/Send";
 import './Chat.css'
-import Header from "../header/Header";
+import Button from "@material-ui/core/Button";
 
 type ChatUser = {
   id: number,
@@ -59,7 +58,7 @@ const Chat = () => {
       });
 
     loadContacts();
-  }, [token, stompClient]);
+  }, []);
 
   useEffect(() => {
     if (!activeContact) return;
@@ -175,6 +174,7 @@ const Chat = () => {
             <ul>
               {contacts.map((contact) => (
                 <li
+                  key={contact.id}
                   onClick={() => setActiveContact(contact)}
                   className={
                     activeContact && contact.id === activeContact.id
@@ -205,7 +205,7 @@ const Chat = () => {
           <ScrollToBottom classNameName="messages">
             <ul>
               {messages.map((msg) => (
-                <li className={msg.senderId === user.id ? "sent" : "replies"}>
+                <li key={msg.content} className={msg.senderId === user.id ? "sent" : "replies"}>
                   {/*{msg.senderId !== user.id && (*/}
                   {/*  // <img src={activeContact.profilePicture} alt="" />*/}
                   {/*)}*/}
@@ -228,14 +228,12 @@ const Chat = () => {
                   }
                 }}
               />
-
-              <Button
-                icon={<SendIcon/>}
-                onClick={() => {
-                  sendMessage(text);
-                  setText("");
-                }}
-              />
+              <Button onClick={() => {
+                sendMessage(text);
+                setText("");
+              }}>
+                <SendIcon/>
+              </Button>
             </div>
           </div>
         </div>
