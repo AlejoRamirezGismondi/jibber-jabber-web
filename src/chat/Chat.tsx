@@ -6,6 +6,8 @@ import {getToken} from "../utils/token";
 import SendIcon from "@material-ui/icons/Send";
 import './Chat.css'
 import Button from "@material-ui/core/Button";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 
 type ChatUser = {
   id: number,
@@ -30,17 +32,10 @@ const Chat = () => {
   const [contacts, setContacts] = useState<ChatUser[]>([]);
   const [activeContact, setActiveContact] = useState<ChatUser>();
   const [messages, setMessages] = useState<Message[]>([]);
-
-  let stompClient = null;
-  const Stomp = require("stompjs");
-  let SockJS = require("sockjs-client");
-  SockJS = new SockJS(messageUrl + 'ws');
-  stompClient = Stomp.over(SockJS);
+  const [stompClient, setStompClient] = useState(null);
   const token = getToken();
 
   useEffect(() => {
-    stompClient.connect({}, onConnected, onError);
-
     axios.get(userUrl + 'user', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -50,6 +45,22 @@ const Chat = () => {
         setUser(response.data);
         loadContacts();
       });
+
+    const socket = new SockJS(messageUrl + 'ws');
+    const over = Stomp.over(socket);
+    setStompClient(over);
+    over.connect(
+      {},
+      () => {
+        over.subscribe(
+          "/queue/messages",
+          onMessageReceived
+        );
+      },
+      (err) => {
+        console.log(err)
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -64,32 +75,17 @@ const Chat = () => {
       });
 
     loadContacts();
-  }, [activeContact, token, user]);
-
-  const onConnected = () => {
-    stompClient.subscribe(
-      "/queue/messages",
-      onMessageReceived
-    );
-  };
-
-  const onError = (err) => {
-    console.log(err);
-  };
-
-  function addToActiveChatMessages(message: Message) {
-    const newMessages = [...messages];
-    newMessages.push(message);
-    setMessages(newMessages);
-  }
+  }, [activeContact]);
 
   const onMessageReceived = (msg) => {
     const message: Message = JSON.parse(msg.body);
 
-    if (!user || message.senderId === user.id) return;
+    if (!user || message.senderId === user.id) {
+      return;
+    }
 
     if (activeContact && message.senderId === activeContact.id) {
-      addToActiveChatMessages(message);
+      setMessages([...messages, message]);
     } else {
       const sender = contacts.find(c => c.id === message.senderId);
       sender.newMessages = sender.newMessages + 1;
@@ -114,8 +110,8 @@ const Chat = () => {
         'Authorization': `Bearer ${token}`
       }, JSON.stringify(message));
 
-      const message2: Message = {...message, timestamp: null};
-      addToActiveChatMessages(message2);
+      const message2: Message = {...message, timestamp: new Date().toLocaleDateString()};
+      setMessages([...messages, message2]);
     }
   };
 
@@ -206,8 +202,8 @@ const Chat = () => {
           </div>
           <ScrollToBottom className="messages">
             <ul>
-              {messages.map((msg) => (
-                <li key={msg.content} className={msg.senderId === user.id ? "sent" : "replies"}>
+              {messages.map((msg, index) => (
+                <li key={index} className={msg.senderId === user.id ? "replies" : "sent"}>
                   <p>{msg.content}</p>
                 </li>
               ))}
