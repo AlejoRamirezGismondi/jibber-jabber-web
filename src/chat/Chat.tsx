@@ -26,6 +26,11 @@ type Message = {
   timestamp: string
 }
 
+type Chat = {
+  contactId: number,
+  messages: Message[]
+}
+
 const Chat = () => {
   const [user, setUser] = useState<ChatUser>();
   const [text, setText] = useState("");
@@ -49,18 +54,20 @@ const Chat = () => {
     const socket = new SockJS(messageUrl + 'ws');
     const over = Stomp.over(socket);
     setStompClient(over);
-    over.connect(
-      {},
-      () => {
-        over.subscribe(
-          "/queue/messages",
-          onMessageReceived
-        );
+    over.connect({}, function (frame) {
+        console.log('connected: ' + frame);
+        over.subscribe("/queue/messages", (msg) => {
+          onMessageReceived(msg);
+        });
       },
       (err) => {
-        console.log(err)
+        console.log(err);
       }
     );
+
+    return () => {
+      stompClient.disconnect();
+    }
   }, []);
 
   useEffect(() => {
@@ -78,23 +85,28 @@ const Chat = () => {
   }, [activeContact]);
 
   const onMessageReceived = (msg) => {
-    const message: Message = JSON.parse(msg.body);
+    const chat: Chat = JSON.parse(msg.body);
 
-    if (!user || message.senderId === user.id) {
-      return;
-    }
+    //TODO delete
+    // if (!user || !contacts) {
+    //   debugger
+    // }
 
-    if (activeContact && message.senderId === activeContact.id) {
-      setMessages([...messages, message]);
+    if (activeContact && chat.contactId === activeContact.id) {
+      setMessages(chat.messages);
     } else {
-      const sender = contacts.find(c => c.id === message.senderId);
+      const sender = contacts.find(c => c.id === chat.contactId);
+
+      //TODO delete
+      // if (!sender) debugger
+
       sender.newMessages = sender.newMessages + 1;
       setContacts(contacts.map(c => {
-        if (c.id === message.senderId) {
+        if (c.id === chat.contactId) {
           return sender;
         }
         return c;
-      }))
+      }));
     }
   };
 
@@ -143,7 +155,7 @@ const Chat = () => {
     setContacts(updatedContacts);
   };
 
-  if (!user) return (<div>
+  if (!user || !contacts) return (<div>
     <p>Loading...</p>
   </div>);
 
@@ -155,16 +167,6 @@ const Chat = () => {
           <div id="profile">
             <div className="wrap">
               <p>{user.firstName} {user.lastName}</p>
-              <div id="status-options">
-                <ul>
-                  <li id="status-online" className="active">
-                    <span className="status-circle"></span> <p>Online</p>
-                  </li>
-                  <li id="status-offline">
-                    <span className="status-circle"></span> <p>Offline</p>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
           <div id="contacts">
