@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
-import "./Chat.css";
+import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from "axios";
 import {messageUrl, userUrl} from "../utils/http";
 import {getToken} from "../utils/token";
@@ -49,9 +48,8 @@ const Chat = () => {
     })
       .then(response => {
         setUser(response.data);
+        loadContacts();
       });
-
-    loadContacts();
   }, []);
 
   useEffect(() => {
@@ -69,10 +67,9 @@ const Chat = () => {
   }, [activeContact, token, user]);
 
   const onConnected = () => {
-    console.log("connected");
     stompClient.subscribe(
       "/queue/messages",
-      onNotificationReceived
+      onMessageReceived
     );
   };
 
@@ -80,16 +77,20 @@ const Chat = () => {
     console.log(err);
   };
 
-  const onNotificationReceived = (msg) => {
-    const message: Message = JSON.parse(msg.body);
-    console.log('I received a message!');
-    console.log(message);
+  function addToActiveChatMessages(message: Message) {
+    const newMessages = [...messages];
+    newMessages.push(message);
+    setMessages(newMessages);
+  }
 
-    if (message.senderId === activeContact.id) {
-      const newMessages = [...messages];
-      newMessages.push(message);
-      setMessages(newMessages);
-    } else {// TODO A chequear
+  const onMessageReceived = (msg) => {
+    const message: Message = JSON.parse(msg.body);
+
+    if (!user || message.senderId === user.id) return;
+
+    if (activeContact && message.senderId === activeContact.id) {
+      addToActiveChatMessages(message);
+    } else {
       const sender = contacts.find(c => c.id === message.senderId);
       sender.newMessages = sender.newMessages + 1;
       setContacts(contacts.map(c => {
@@ -109,19 +110,12 @@ const Chat = () => {
         content: msg,
         token: `Bearer ${token}`
       };
-      const message2: Message = {
-        senderId: user.id,
-        recipientId: activeContact.id,
-        content: msg,
-        timestamp: null
-      };
       stompClient.send("/app/chat", {
         'Authorization': `Bearer ${token}`
       }, JSON.stringify(message));
 
-      const newMessages = [...messages];
-      newMessages.push(message2);
-      setMessages(newMessages);
+      const message2: Message = {...message, timestamp: null};
+      addToActiveChatMessages(message2);
     }
   };
 
@@ -179,27 +173,28 @@ const Chat = () => {
           </div>
           <div id="contacts">
             <ul>
-              {contacts.map((contact) => (
+              {contacts.map((contact: ChatUser) => (
+                (contact.id !== user.id) &&
                 <li
-                  key={contact.id}
-                  onClick={() => setActiveContact(contact)}
-                  className={
-                    activeContact && contact.id === activeContact.id
-                      ? "contact active"
-                      : "contact"
-                  }
+                    key={contact.id}
+                    onClick={() => setActiveContact(contact)}
+                    className={
+                      activeContact && contact.id === activeContact.id
+                        ? "contact active"
+                        : "contact"
+                    }
                 >
-                  <div className="wrap">
-                    <div className="meta">
-                      <p className="name">{contact.firstName + ' ' + contact.lastName}</p>
-                      {contact.newMessages &&
-                      contact.newMessages > 0 && (
-                        <p className="preview">
-                          {contact.newMessages} new messages
-                        </p>
-                      )}
+                    <div className="wrap">
+                        <div className="meta">
+                            <p className="name">{contact.firstName + ' ' + contact.lastName}</p>
+                          {contact.newMessages &&
+                          contact.newMessages > 0 && (
+                            <p className="preview">
+                              {contact.newMessages} new messages
+                            </p>
+                          )}
+                        </div>
                     </div>
-                  </div>
                 </li>
               ))}
             </ul>
@@ -209,13 +204,10 @@ const Chat = () => {
           <div className="contact-profile">
             <p>{activeContact && activeContact.firstName + ' ' + activeContact.lastName}</p>
           </div>
-          <ScrollToBottom classNameName="messages">
+          <ScrollToBottom className="messages">
             <ul>
               {messages.map((msg) => (
                 <li key={msg.content} className={msg.senderId === user.id ? "sent" : "replies"}>
-                  {/*{msg.senderId !== user.id && (*/}
-                  {/*  // <img src={activeContact.profilePicture} alt="" />*/}
-                  {/*)}*/}
                   <p>{msg.content}</p>
                 </li>
               ))}
