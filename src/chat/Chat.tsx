@@ -25,12 +25,6 @@ type Message = {
   timestamp: string
 }
 
-type Notification = {
-  id: number,
-  senderId: number,
-  senderName: string
-}
-
 const Chat = () => {
   const [user, setUser] = useState<ChatUser>();
   const [text, setText] = useState("");
@@ -87,33 +81,46 @@ const Chat = () => {
   };
 
   const onNotificationReceived = (msg) => {
-    const notification: Notification = JSON.parse(msg.body);
+    const message: Message = JSON.parse(msg.body);
+    console.log('I received a message!');
+    console.log(message);
 
-    const sender = contacts.find(c => c.id === notification.senderId);
-    sender.newMessages = sender.newMessages + 1;
-    setContacts(contacts.map(c => {
-      if (c.id === notification.id) {
-        return sender;
-      }
-      return c;
-    }))
-    // loadContacts();
+    if (message.senderId === activeContact.id) {
+      const newMessages = [...messages];
+      newMessages.push(message);
+      setMessages(newMessages);
+    } else {// TODO A chequear
+      const sender = contacts.find(c => c.id === message.senderId);
+      sender.newMessages = sender.newMessages + 1;
+      setContacts(contacts.map(c => {
+        if (c.id === message.senderId) {
+          return sender;
+        }
+        return c;
+      }))
+    }
   };
 
   const sendMessage = (msg) => {
     if (msg.trim() !== "") {
-      const message: Message = {
-        senderId: 0,
-        recipientId: 0,
+      const message = {
+        senderId: user.id,
+        recipientId: activeContact.id,
         content: msg,
-        timestamp: new Date().toLocaleDateString('fr-CA', {year: 'numeric', month: '2-digit', day: '2-digit'})
+        token: `Bearer ${token}`
+      };
+      const message2: Message = {
+        senderId: user.id,
+        recipientId: activeContact.id,
+        content: msg,
+        timestamp: null
       };
       stompClient.send("/app/chat", {
         'Authorization': `Bearer ${token}`
       }, JSON.stringify(message));
 
       const newMessages = [...messages];
-      newMessages.push(message);
+      newMessages.push(message2);
       setMessages(newMessages);
     }
   };
