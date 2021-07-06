@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from "axios";
 import {messageUrl, userUrl} from "../utils/http";
@@ -28,7 +28,7 @@ type Message = {
 
 type Chat = {
   contactId: number,
-  messages: Message[]
+  message: Message
 }
 
 const Chat = () => {
@@ -37,85 +37,12 @@ const Chat = () => {
   const [contacts, setContacts] = useState<ChatUser[]>([]);
   const [activeContact, setActiveContact] = useState<ChatUser>();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [stompClient, setStompClient] = useState(null);
+  const stompClient = useRef(null);
+  const subscription = useRef(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const token = getToken();
 
-  useEffect(() => {
-    axios.get(userUrl + 'user', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        setUser(response.data);
-        loadContacts();
-      });
-
-    const socket = new SockJS(messageUrl + 'ws');
-    const over = Stomp.over(socket);
-    setStompClient(over);
-    over.connect({}, function () {
-      over.subscribe("/queue/messages", callback);
-    });
-
-    return () => {
-      stompClient.disconnect();
-    }
-  });
-
-  const onMessageReceived = (msg) => {
-    const chat: Chat = JSON.parse(msg.body);
-
-    if (activeContact && chat.contactId === activeContact.id) {
-      setMessages(chat.messages);
-    } else {
-      const sender = contacts.find(c => c.id === chat.contactId);
-      sender.newMessages = sender.newMessages + 1;
-      setContacts(contacts.map(c => {
-        if (c.id === chat.contactId) {
-          return sender;
-        }
-        return c;
-      }));
-    }
-  };
-
-  const callback = useCallback((msg) => {
-    onMessageReceived(msg);
-  }, []);
-
-  useEffect(() => {
-    if (!activeContact) return;
-    axios.get(messageUrl + 'messages/' + user.id + '/' + activeContact.id, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        setMessages(response.data);
-      });
-
-    loadContacts();
-  }, [activeContact]);
-
-  const sendMessage = (msg) => {
-    if (msg.trim() !== "") {
-      const message = {
-        senderId: user.id,
-        recipientId: activeContact.id,
-        content: msg,
-        token: `Bearer ${token}`
-      };
-      stompClient.send("/app/chat", {
-        'Authorization': `Bearer ${token}`
-      }, JSON.stringify(message));
-
-      const message2: Message = {...message, timestamp: new Date().toLocaleDateString()};
-      setMessages([...messages, message2]);
-    }
-  };
-
-  const loadContacts = () => {
+  const loadContacts = useCallback(() => {
 
     axios.get(userUrl + 'user/all', {
       headers: {
@@ -141,6 +68,87 @@ const Chat = () => {
         })
     });
     setContacts(updatedContacts);
+  }, [contacts, token, user]);
+
+  useEffect(() => {
+    axios.get(userUrl + 'user', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setUser(response.data);
+        loadContacts();
+      });
+
+    const socket = new SockJS(messageUrl + 'ws');
+    const over = Stomp.over(socket);
+    stompClient.current = over;
+    over.connect({}, function () {
+      setIsConnected(true);
+    });
+
+    return () => {
+      stompClient.current.disconnect();
+      setIsConnected(false);
+    }
+  }, [token]);
+
+  const onMessageReceived = useCallback((msg) => {
+    const chat: Chat = JSON.parse(msg.body);
+
+    if (activeContact && chat.contactId === activeContact.id) {
+      setMessages((messages) => messages ? [...messages, chat.message] : undefined);
+    } else {
+      const sender = contacts.find(c => c.id === chat.contactId);
+      sender.newMessages = sender.newMessages + 1;
+      setContacts(contacts.map(c => {
+        if (c.id === chat.contactId) {
+          return sender;
+        }
+        return c;
+      }));
+    }
+  }, [activeContact, contacts]);
+
+  useEffect(() => {
+    if (isConnected) {
+      subscription.current = stompClient.current.subscribe("/queue/messages", onMessageReceived, {id: 'chat'});
+      return () => {
+        subscription.current.unsubscribe('chat');
+      }
+    }
+  }, [isConnected, onMessageReceived]);
+
+  useEffect(() => {
+    if (!activeContact) return;
+    axios.get(messageUrl + 'messages/' + user.id + '/' + activeContact.id, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setMessages(response.data);
+      });
+
+    loadContacts();
+  }, [activeContact]);
+
+  const sendMessage = (msg) => {
+    if (msg.trim() !== "") {
+      const message = {
+        senderId: user.id,
+        recipientId: activeContact.id,
+        content: msg,
+        token: `Bearer ${token}`
+      };
+      stompClient.current.send("/app/chat", {
+        'Authorization': `Bearer ${token}`
+      }, JSON.stringify(message));
+
+      const message2: Message = {...message, timestamp: new Date().toLocaleDateString()};
+      setMessages([...messages, message2]);
+    }
   };
 
   if (!user || !contacts) return (<div>
