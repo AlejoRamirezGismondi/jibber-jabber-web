@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from "axios";
 import {messageUrl, userUrl} from "../utils/http";
@@ -54,20 +54,34 @@ const Chat = () => {
     const socket = new SockJS(messageUrl + 'ws');
     const over = Stomp.over(socket);
     setStompClient(over);
-    over.connect({}, function (frame) {
-        console.log('connected: ' + frame);
-        over.subscribe("/queue/messages", (msg) => {
-          onMessageReceived(msg);
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    over.connect({}, function () {
+      over.subscribe("/queue/messages", callback);
+    });
 
     return () => {
       stompClient.disconnect();
     }
+  });
+
+  const onMessageReceived = (msg) => {
+    const chat: Chat = JSON.parse(msg.body);
+
+    if (activeContact && chat.contactId === activeContact.id) {
+      setMessages(chat.messages);
+    } else {
+      const sender = contacts.find(c => c.id === chat.contactId);
+      sender.newMessages = sender.newMessages + 1;
+      setContacts(contacts.map(c => {
+        if (c.id === chat.contactId) {
+          return sender;
+        }
+        return c;
+      }));
+    }
+  };
+
+  const callback = useCallback((msg) => {
+    onMessageReceived(msg);
   }, []);
 
   useEffect(() => {
@@ -83,32 +97,6 @@ const Chat = () => {
 
     loadContacts();
   }, [activeContact]);
-
-  const onMessageReceived = (msg) => {
-    const chat: Chat = JSON.parse(msg.body);
-
-    //TODO delete
-    // if (!user || !contacts) {
-    //   debugger
-    // }
-
-    if (activeContact && chat.contactId === activeContact.id) {
-      setMessages(chat.messages);
-    } else {
-      const sender = contacts.find(c => c.id === chat.contactId);
-
-      //TODO delete
-      // if (!sender) debugger
-
-      sender.newMessages = sender.newMessages + 1;
-      setContacts(contacts.map(c => {
-        if (c.id === chat.contactId) {
-          return sender;
-        }
-        return c;
-      }));
-    }
-  };
 
   const sendMessage = (msg) => {
     if (msg.trim() !== "") {
