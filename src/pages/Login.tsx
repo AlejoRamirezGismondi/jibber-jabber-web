@@ -38,6 +38,7 @@ const Login = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<boolean>(false);
 
   let history = useHistory();
 
@@ -51,9 +52,12 @@ const Login = () => {
 
     axios.post(userUrl+`user/login`, user)
       .then(response => {
-        document.cookie=`token=${response.data};Secure;`
+        document.cookie=`token=${response.data};Secure;`;
         history.push('/');
-      });
+      }).catch(err => {
+        console.log(err);
+        setError(true);
+    });
   }
 
   return (
@@ -91,6 +95,7 @@ const Login = () => {
             autoComplete="current-password"
             onChange={(e) => {setPassword(e.target.value)}}
           />
+          {error && (<p color={'#FF0000'}> There was an error with the login request, please check your data </p>)}
           <Button
             type="submit"
             fullWidth
