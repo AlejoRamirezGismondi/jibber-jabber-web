@@ -52,8 +52,12 @@ const Login = () => {
 
     axios.post(userUrl+`user/login`, user)
       .then(response => {
-        document.cookie=`token=${response.data};Secure;`;
-        history.push('/');
+        if (response.data === 'Bad credentials') {
+          setError(true);
+        } else {
+          document.cookie=`token=${response.data};Secure;`;
+          history.push('/');
+        }
       }).catch(err => {
         console.log(err);
         setError(true);
