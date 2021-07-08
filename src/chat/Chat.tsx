@@ -53,11 +53,11 @@ const Chat = () => {
     })).data;
 
     cont.map(async c => {
-      const u = await axios.get(messageUrl + 'messages/' + user.id + '/' + c.id + '/count', {
+      const u = (await axios.get(messageUrl + 'messages/' + user.id + '/' + c.id + '/count', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
-      })
+      })).data;
       c.newMessages = u;
       return c;
     });
