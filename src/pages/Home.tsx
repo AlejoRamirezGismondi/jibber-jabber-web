@@ -46,7 +46,7 @@ const Home = () => {
     })
       .then(res => {
         setCards(res.data.map(card => {
-          return {id: card.id, text: card.body, date: card.date, userName: card.firstName, liked: card.likedByUser, likes: card.likes}
+          return {id: card.id, text: card.body, date: card.date, userName: card.userName, liked: card.likedByUser, likes: card.likes}
         }))
       });
 
@@ -72,7 +72,7 @@ const Home = () => {
   return (
     <div>
       <Header/>
-      <NewPost className={classes.newPost} username={user.firstName}/>
+      <NewPost className={classes.newPost} userName={user.firstName}/>
       <Feed onDelete={deletedId => {postDeleted(deletedId)}} own={false} cards={cards}/>
     </div>
   );

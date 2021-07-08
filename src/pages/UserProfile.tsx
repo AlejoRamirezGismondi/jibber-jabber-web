@@ -47,7 +47,7 @@ const UserProfile = () => {
     })
       .then(res => {
         setPosts(res.data.map(card => {
-          return {id: card.id, text: card.body, date: card.date, userName: card.firstName, likes: card.likes, liked: card.likedByUser}
+          return {id: card.id, text: card.body, date: card.date, userName: card.userName, likes: card.likes, liked: card.likedByUser}
         }))
       });
   }, [token, id]);
@@ -81,6 +81,9 @@ const UserProfile = () => {
       <Header/>
       <Card className={classes.root}>
         <CardContent>
+          <Typography className={classes.pos} color="textSecondary">
+            Username: {user.userName}
+          </Typography>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             First Name: {user.firstName}
           </Typography>

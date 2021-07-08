@@ -13,7 +13,8 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import {userUrl} from "../utils/http";
 import {User} from "../models/User";
-import {getToken} from "../utils/token";
+import {expireToken, getToken} from "../utils/token";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,7 @@ const ProfileInfo = (props: User) => {
   const [lastName, setLastName] = useState<string>(props.lastName);
   const [age, setAge] = useState<string>(props.age);
   const [email, setEmail] = useState<string>(props.email);
+  const history = useHistory();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -58,7 +60,7 @@ const ProfileInfo = (props: User) => {
       lastName: lastName,
       age: age,
       email: email,
-      userName: '',
+      userName: props.userName,
       id: 0
     }, {
       headers: {
@@ -66,6 +68,10 @@ const ProfileInfo = (props: User) => {
       }
     }).then(() => {
       setEditEnabled(false);
+      if (email !== props.email) {
+        expireToken();
+        history.push('/login');
+      }
     });
   }
 
@@ -82,7 +88,7 @@ const ProfileInfo = (props: User) => {
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar}>
-              {firstName.charAt(0)}
+              {props.userName.charAt(0)}
             </Avatar>
           }
           className={classes.header}

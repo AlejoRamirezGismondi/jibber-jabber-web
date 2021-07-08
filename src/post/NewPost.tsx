@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const NewPost = (props) => {
   const classes = useStyles();
   const date: Date = new Date();
-  const userName: string = props.username;
+  const userName: string = props.userName;
 
   const [text, setText] = useState("");
 

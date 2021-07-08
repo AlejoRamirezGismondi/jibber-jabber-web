@@ -4,5 +4,6 @@ export type User = {
   lastName: string,
   age: string,
   email: string,
-  following: boolean
+  following: boolean,
+  userName: string
 }
