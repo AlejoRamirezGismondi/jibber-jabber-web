@@ -38,7 +38,7 @@ const Header = () => {
         noWrap
         className={classes.toolbarTitle}
       >
-        Jibber Jabber
+        Jibber Jabber CAMBIADO
       </Typography>
       <div className={classes.rightButtons}>
         <IconButton href={'/search'}>
