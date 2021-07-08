@@ -46,7 +46,7 @@ const Home = () => {
     })
       .then(res => {
         setCards(res.data.map(card => {
-          return {id: card.id, text: card.body, date: card.date, userName: card.firstName, liked: card.likedByUser, likes: card.likes}
+          return {id: card.id, text: card.body, date: card.date, userName: card.username, liked: card.likedByUser, likes: card.likes}
         }))
       });
 

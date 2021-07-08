@@ -10,6 +10,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
 type ChatUser = {
+  username: string,
   id: number,
   firstName: string,
   lastName: string,
@@ -162,7 +163,7 @@ const Chat = () => {
           <Button href={"/"} size="small">Home</Button>
           <div id="profile">
             <div className="wrap">
-              <p>{user.firstName} {user.lastName}</p>
+              <p>{user.username}</p>
             </div>
           </div>
           <div id="contacts">
@@ -180,7 +181,7 @@ const Chat = () => {
                 >
                     <div className="wrap">
                         <div className="meta">
-                            <p className="name">{contact.firstName + ' ' + contact.lastName}</p>
+                            <p className="name">{contact.username}</p>
                           {contact.newMessages &&
                           contact.newMessages > 0 && (
                             <p className="preview">
@@ -196,7 +197,7 @@ const Chat = () => {
         </div>
         <div className="content">
           <div className="contact-profile">
-            <p>{activeContact && activeContact.firstName + ' ' + activeContact.lastName}</p>
+            <p>{activeContact && activeContact.username}</p>
           </div>
           <ScrollToBottom className="messages">
             <ul>

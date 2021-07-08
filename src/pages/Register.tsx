@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
   const classes = useStyles();
 
+  const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [age, setAge] = useState("");
@@ -47,6 +48,7 @@ const Register = () => {
     event.preventDefault();
 
     const user = {
+      username: username,
       firstName: firstName,
       lastName: lastName,
       age: age,
@@ -74,6 +76,19 @@ const Register = () => {
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="uname"
+                name="username"
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="username"
+                autoFocus
+                onChange={(e) => {setUsername(e.target.value)}}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"

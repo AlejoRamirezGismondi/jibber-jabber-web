@@ -77,10 +77,10 @@ const Search = () => {
                   <CardHeader
                     avatar={
                       <Avatar aria-label="recipe" className={classes.avatar}>
-                        {user.firstName.charAt(0)}
+                        {user.username.charAt(0)}
                       </Avatar>
                     }
-                    title={user.firstName}
+                    title={user.username}
                     subheader={user.email}
                   />
                 </Link>

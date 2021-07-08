@@ -27,7 +27,7 @@ const Profile = () => {
     return (
       <div>
         <Header/>
-        <ProfileInfo id={user.id} following={user.following} firstName={user.firstName} lastName={user.lastName} age={user.age} email={user.email}/>
+        <ProfileInfo username={user.username} id={user.id} following={user.following} firstName={user.firstName} lastName={user.lastName} age={user.age} email={user.email}/>
       </div>
     )
   } else {

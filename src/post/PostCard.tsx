@@ -31,7 +31,7 @@ const PostCard = (props) => {
       <CardHeader
         avatar={
           <Avatar aria-label="post" className={classes.avatar}>
-            U
+            {props.username.charat(0)}
           </Avatar>
         }
         title={props.userName}
