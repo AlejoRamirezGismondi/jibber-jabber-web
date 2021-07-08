@@ -46,23 +46,22 @@ const Chat = () => {
 
   const loadContacts = useCallback(async () => {
 
-    const cont =(await axios.get(userUrl + 'user/all', {
+    const cont = (await axios.get(userUrl + 'user/all', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })).data;
 
-    cont.map(async c => {
-      const u = (await axios.get(messageUrl + 'messages/' + user.id + '/' + c.id + '/count', {
+    const cont2 = cont.map(async c => {
+      c.newMessages = (await axios.get(messageUrl + 'messages/' + user.id + '/' + c.id + '/count', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })).data;
-      c.newMessages = u;
       return c;
     });
 
-    setContacts(cont);
+    setContacts(cont2);
   }, [contacts, token, user]);
 
   useEffect(() => {
