@@ -5,5 +5,5 @@ export type User = {
   age: string,
   email: string,
   following: boolean,
-  username: string
+  userName: string
 }

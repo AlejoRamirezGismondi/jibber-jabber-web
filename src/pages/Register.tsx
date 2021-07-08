@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
   const classes = useStyles();
 
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [age, setAge] = useState("");
@@ -48,7 +48,7 @@ const Register = () => {
     event.preventDefault();
 
     const user = {
-      username: username,
+      userName: userName,
       firstName: firstName,
       lastName: lastName,
       age: age,
@@ -79,12 +79,12 @@ const Register = () => {
             <Grid item xs={12}>
               <TextField
                 autoComplete="uname"
-                name="username"
+                name="userName"
                 variant="outlined"
                 required
                 fullWidth
-                id="username"
-                label="username"
+                id="userName"
+                label="userName"
                 autoFocus
                 onChange={(e) => {setUsername(e.target.value)}}
               />

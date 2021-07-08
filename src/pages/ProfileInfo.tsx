@@ -58,7 +58,7 @@ const ProfileInfo = (props: User) => {
       lastName: lastName,
       age: age,
       email: email,
-      userName: props.username,
+      userName: props.userName,
       id: 0
     }, {
       headers: {
