@@ -24,7 +24,8 @@ type Message = {
   senderId: number,
   recipientId: number,
   content: string,
-  timestamp: string
+  timestamp: string,
+  received: boolean
 }
 
 type Chat = {
@@ -147,7 +148,7 @@ const Chat = () => {
         'Authorization': `Bearer ${token}`
       }, JSON.stringify(message));
 
-      const message2: Message = {...message, timestamp: new Date().toLocaleDateString()};
+      const message2: Message = {...message, timestamp: new Date().toLocaleDateString(), received: true};
       setMessages([...messages, message2]);
     }
   };
